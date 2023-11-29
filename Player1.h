@@ -9,6 +9,7 @@ class Player1 : public QObject, public QGraphicsPixmapItem
     Q_OBJECT
 public:
     explicit Player1();
+    void Rotate(int x);
 
 signals:
 

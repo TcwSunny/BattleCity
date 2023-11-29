@@ -7,3 +7,13 @@ Player1::Player1()
     setPixmap(pixmap);
 
 }
+
+void Player1::Rotate(int x)
+{
+    QPointF c = boundingRect().center();
+    QTransform t;
+    t.translate(c.x(), c.y());
+    t.rotate(x);
+    t.translate(-c.x(), -c.y());
+    setTransform(t);
+}

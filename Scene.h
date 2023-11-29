@@ -4,6 +4,7 @@
 #include "Player1.h"
 
 #include <QGraphicsScene>
+#include <QGraphicsPixmapItem>
 #include <QGraphicsSceneMouseEvent>
 
 class Scene : public QGraphicsScene
@@ -15,6 +16,10 @@ public:
 private:
     Player1 *player1;
 
+
+    // QGraphicsScene interface
+protected:
+    void keyPressEvent(QKeyEvent *event);
 };
 
 #endif // SCENE_H
