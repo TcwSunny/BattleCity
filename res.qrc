@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/new/prefix1"/>
+    <qresource prefix="/images">
+        <file>Images/backGround.jpg</file>
+        <file>Images/bricks.png</file>
+        <file>Images/ice.png</file>
+        <file>Images/Powerup_Grenade.png</file>
+        <file>Images/Powerup_Helmet.png</file>
+        <file>Images/Powerup_Shovel.png</file>
+        <file>Images/Powerup_Star.png</file>
+        <file>Images/Powerup_Tank.png</file>
+        <file>Images/Powerup_Timer.png</file>
+        <file>Images/Tank_Enemy1.png</file>
+        <file>Images/Tank_Enemy2.png</file>
+        <file>Images/Tank_Enemy3.png</file>
+        <file>Images/Tank_Enemy4.png</file>
+        <file>Images/Tank_Player1.png</file>
+        <file>Images/Tank_Player2.png</file>
+        <file>Images/trees.png</file>
+    </qresource>
+</RCC>

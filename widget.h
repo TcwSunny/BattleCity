@@ -1,6 +1,7 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
+#include"Scene.h"
 #include <QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -17,5 +18,7 @@ public:
 
 private:
     Ui::Widget *ui;
+    Scene *scene;
+
 };
 #endif // WIDGET_H
