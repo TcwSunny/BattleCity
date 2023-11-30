@@ -1,20 +1,23 @@
-#include "Bullet1.h"
+#include "Bullet.h"
+#include "Tank.h"
 
 #include <QGraphicsScene>
 #include <QList>
 #include <QDebug>
+#include <QTimer>
 
-Bullet1::Bullet1():isBulletInScene(0)
+Bullet::Bullet(Tank *tank)
 {
     //setRect(0, 0, 10, 50);
     setPixmap(QPixmap(":/images/Images/bullet.png"));
 
     timer = new QTimer(this);//跟著Bullet Delete掉
-    connect(timer, &QTimer::timeout, this, &Bullet1::move);//當發生time out時使用這個物件的move處理
+    connect(timer, &QTimer::timeout, this, &Bullet::move);//當發生time out時使用這個物件的move處理
     timer->start(50); // fires every 50ms
+    Parent = tank;
 }
 
-void Bullet1::move() {
+void Bullet::move() {
     if(x()>35 && x()<655 && y()>40 && y()<655){
         if(Rotation == 360){
             setPos(x(), y()-8);
@@ -28,12 +31,12 @@ void Bullet1::move() {
     }else{
         if (scene() != nullptr) {
             scene()->removeItem(this);
-            isBulletInScene = 0;
+            Parent->setIsBulletInScene(0);
         }
     }
 }
 
-void Bullet1::Rotate(int x)
+void Bullet::Rotate(int x)
 {
     QPointF c = boundingRect().center();
     QTransform t;
@@ -44,22 +47,24 @@ void Bullet1::Rotate(int x)
     Rotation = x+90;
 }
 
-bool Bullet1::getIsBulletInScene() const
+Tank *Bullet::getParent() const
 {
-    return isBulletInScene;
+    return Parent;
 }
 
-void Bullet1::setIsBulletInScene(bool newIsBulletInScene)
+void Bullet::setParent(Tank *newParent)
 {
-    isBulletInScene = newIsBulletInScene;
+    Parent = newParent;
 }
 
-int Bullet1::getRotation() const
+
+
+int Bullet::getRotation() const
 {
     return Rotation;
 }
 
-void Bullet1::setRotation(int newRotation)
+void Bullet::setRotation(int newRotation)
 {
     Rotation = newRotation;
 }

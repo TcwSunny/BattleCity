@@ -1,3 +1,4 @@
+#include "Bullet.h"
 #include "Player1.h"
 
 Player1::Player1()
@@ -6,25 +7,15 @@ Player1::Player1()
     pixmap = pixmap.scaled(QSize(32, 32));
     setPixmap(pixmap);
 
+    bullet = new Bullet(this);
 }
 
-void Player1::Rotate(int x)
+Bullet *Player1::getBullet() const
 {
-    QPointF c = boundingRect().center();
-    QTransform t;
-    t.translate(c.x(), c.y());
-    t.rotate(x);
-    t.translate(-c.x(), -c.y());
-    setTransform(t);
-    Rotation = x;
+    return bullet;
 }
 
-int Player1::getRotation() const
+void Player1::setBullet(Bullet *newBullet)
 {
-    return Rotation;
-}
-
-void Player1::setRotation(int newRotation)
-{
-    Rotation = newRotation;
+    bullet = newBullet;
 }

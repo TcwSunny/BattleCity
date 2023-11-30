@@ -12,7 +12,7 @@ Scene::Scene(QObject *parent)
     player1->setPos(30,638);
     addItem(player1);
 
-    bullet1 = new Bullet1();
+
 }
 
 void Scene::keyPressEvent(QKeyEvent *event){
@@ -29,11 +29,11 @@ void Scene::keyPressEvent(QKeyEvent *event){
     } else if (event->key() == Qt::Key_Down && player1->y()<638) {
         player1->setPos(player1->x(),player1->y()+4);
         player1->Rotate(90);
-    }else if (event->key() == Qt::Key_Space && bullet1->getIsBulletInScene()==0) {
-        bullet1->setPos(player1->x()+12,player1->y()+12);
-        bullet1->Rotate(player1->getRotation());
-        addItem(bullet1);
-        bullet1->setIsBulletInScene(1);
+    }else if (event->key() == Qt::Key_Space && player1->getIsBulletInScene()==0) {
+        player1->getBullet()->setPos(player1->x()+12,player1->y()+12);
+        player1->getBullet()->Rotate(player1->getRotation());
+        addItem(player1->getBullet());
+        player1->setIsBulletInScene(1);
     }
 
 
