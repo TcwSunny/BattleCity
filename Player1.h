@@ -11,7 +11,12 @@ public:
     explicit Player1();
     void Rotate(int x);
 
+    int getRotation() const;
+    void setRotation(int newRotation);
+
 signals:
+private:
+    int Rotation;
 
 };
 

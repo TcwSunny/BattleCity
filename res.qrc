@@ -1,5 +1,4 @@
 <RCC>
-    <qresource prefix="/new/prefix1"/>
     <qresource prefix="/images">
         <file>Images/backGround.jpg</file>
         <file>Images/bricks.png</file>
@@ -17,5 +16,8 @@
         <file>Images/Tank_Player1.png</file>
         <file>Images/Tank_Player2.png</file>
         <file>Images/trees.png</file>
+        <file>Images/bullet.png</file>
+        <file>Images/stone.png</file>
+        <file>Images/water.png</file>
     </qresource>
 </RCC>

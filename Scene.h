@@ -1,6 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "Bullet1.h"
 #include "Player1.h"
 
 #include <QGraphicsScene>
@@ -15,6 +16,7 @@ public:
 
 private:
     Player1 *player1;
+    Bullet1 *bullet1;
 
 
     // QGraphicsScene interface

@@ -16,4 +16,15 @@ void Player1::Rotate(int x)
     t.rotate(x);
     t.translate(-c.x(), -c.y());
     setTransform(t);
+    Rotation = x;
+}
+
+int Player1::getRotation() const
+{
+    return Rotation;
+}
+
+void Player1::setRotation(int newRotation)
+{
+    Rotation = newRotation;
 }
