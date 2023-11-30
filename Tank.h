@@ -20,13 +20,9 @@ public:
     bool getIsBulletInScene() const;
     void setIsBulletInScene(bool newIsBulletInScene);
 
-    Bullet* getBullet() const;
-    void setBullet(Bullet *newBullet);
-
 signals:
 private:
     int Rotation;
-    Bullet *bullet;
     bool isBulletInScene;
 
 };

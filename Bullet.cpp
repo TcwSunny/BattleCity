@@ -19,7 +19,7 @@ Bullet::Bullet(Tank *tank)
 
 void Bullet::move() {
     if(x()>35 && x()<655 && y()>40 && y()<655){
-        if(Rotation == 360){
+        if(Rotation == 0){
             setPos(x(), y()-8);
         }else if(Rotation == 90){
             setPos(x()+8, y());
@@ -41,10 +41,10 @@ void Bullet::Rotate(int x)
     QPointF c = boundingRect().center();
     QTransform t;
     t.translate(c.x(), c.y());
-    t.rotate(x+90);
+    t.rotate(x);
     t.translate(-c.x(), -c.y());
     setTransform(t);
-    Rotation = x+90;
+    Rotation = x;
 }
 
 Tank *Bullet::getParent() const

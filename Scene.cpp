@@ -1,3 +1,4 @@
+#include "BasicTank.h"
 #include "Scene.h"
 #include <QGraphicsPixmapItem>
 #include <QKeyEvent>
@@ -12,6 +13,10 @@ Scene::Scene(QObject *parent)
     player1->setPos(30,638);
     addItem(player1);
 
+    BasicTank* basicTank = new BasicTank;
+    basicTank->setPos(102,102);
+    addItem(basicTank);
+
 
 }
 
@@ -19,16 +24,16 @@ void Scene::keyPressEvent(QKeyEvent *event){
 
     if (event->key() == Qt::Key_Left && player1->x()>30) {
         player1->setPos(player1->x()-4,player1->y());
-        player1->Rotate(180);
+        player1->Rotate(270);
     } else if (event->key() == Qt::Key_Right && player1->x()<638) {
         player1->setPos(player1->x()+4,player1->y());
-        player1->Rotate(0);
+        player1->Rotate(90);
     } else if (event->key() == Qt::Key_Up && player1->y()>30) {
         player1->setPos(player1->x(),player1->y()-4);
-        player1->Rotate(270);
+        player1->Rotate(0);
     } else if (event->key() == Qt::Key_Down && player1->y()<638) {
         player1->setPos(player1->x(),player1->y()+4);
-        player1->Rotate(90);
+        player1->Rotate(180);
     }else if (event->key() == Qt::Key_Space && player1->getIsBulletInScene()==0) {
         player1->getBullet()->setPos(player1->x()+12,player1->y()+12);
         player1->getBullet()->Rotate(player1->getRotation());

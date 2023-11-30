@@ -26,15 +26,6 @@ void Tank::setRotation(int newRotation)
     Rotation = newRotation;
 }
 
-Bullet* Tank::getBullet() const
-{
-    return bullet;
-}
-
-void Tank::setBullet(Bullet* newBullet)
-{
-    bullet = newBullet;
-}
 bool Tank::getIsBulletInScene() const
 {
     return isBulletInScene;
