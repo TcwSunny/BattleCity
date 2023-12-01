@@ -25,7 +25,7 @@ void BasicTank::move()
         foreach(QGraphicsItem* item, collidingItemsList) {
             if (dynamic_cast<Brick*>(item) or dynamic_cast<Water*>(item)) {
                 // Collided with a brick, change direction
-                int newRotation = QRandomGenerator::global()->bounded(0, 4) * 90;
+
                 if(getRotation()==0 or getRotation()==360){
                     setPos(x(), y() + 4);
                 } else if (getRotation() == 90) {
@@ -35,7 +35,12 @@ void BasicTank::move()
                 } else if (getRotation() == 270) {
                     setPos(x() + 4, y()); // 向左移動 4 個單位
                 }
+                int newRotation = QRandomGenerator::global()->bounded(0, 4) * 90;
+                while(newRotation == getRotation()){ //改善tank重複撞牆的窘境
+                    newRotation = QRandomGenerator::global()->bounded(0, 4) * 90;
+                }
                 Rotate(newRotation);
+                qDebug() << getRotation();
                 return;
             }
         }
@@ -62,6 +67,9 @@ void BasicTank::move()
         if (!isChangingDirection) {
             isChangingDirection = true;
             int newRotation = QRandomGenerator::global()->bounded(0, 4) * 90;
+            while(newRotation == getRotation()){ //改善tank重複撞牆的窘境
+                newRotation = QRandomGenerator::global()->bounded(0, 4) * 90;
+            }
             Rotate(newRotation);
             qDebug() << getRotation();
         }
