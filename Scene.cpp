@@ -18,7 +18,7 @@ Scene::Scene(QObject *parent)
     addItem(player1);
 
     BasicTank* basicTank = new BasicTank;
-    basicTank->setPos(100,100);
+    basicTank->setPos(200,100);
     addItem(basicTank);
 
     Brick* brick =new Brick;
@@ -54,6 +54,9 @@ Scene::Scene(QObject *parent)
     Brick* brick11 =new Brick;
     brick11->setPos(234,106);
     addItem(brick11);
+    Brick* brick12 =new Brick;
+    brick12->setPos(270,10);
+    addItem(brick12);
 
     Water* water = new Water;
     water -> setPos(298,170);
@@ -79,6 +82,9 @@ Scene::Scene(QObject *parent)
     Water* water8 = new Water;
     water8 -> setPos(362,170);
     addItem(water8);
+    Water* water9 = new Water;
+    water9 -> setPos(298,74);
+    addItem(water9);
 
     Trees* tree = new Trees;
     Trees* tree2 = new Trees;
