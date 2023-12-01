@@ -18,7 +18,7 @@ BasicTank::BasicTank()
 
 void BasicTank::move()
 {
-    if (x() >= 30 && x() <= 638 && y() >= 30 && y() <= 638){
+    if (x() >= 10 && x() <= 458 && y() >= 10 && y() <= 298){
         if (getRotation() == 0 or getRotation() == 360) {
             setPos(x(), y() - 4); // 向上移動 4 個單位
         } else if (getRotation() == 90) {
@@ -29,14 +29,14 @@ void BasicTank::move()
             setPos(x() - 4, y()); // 向左移動 4 個單位
         }
     } else {
-        if (x() < 30){
-            setPos(30,y());
-        }else if (x() > 638){
-            setPos(638,y());
-        }else if(y() < 30){
-            setPos(x(),30);
-        }else if(y() > 638){
-            setPos(x(),638);
+        if (x() < 10){
+            setPos(10,y());
+        }else if (x() > 458){
+            setPos(458,y());
+        }else if(y() < 10){
+            setPos(x(),10);
+        }else if(y() > 298){
+            setPos(x(),298);
         }
         if (!isChangingDirection) {
             isChangingDirection = true;

@@ -18,7 +18,7 @@ Bullet::Bullet(Tank *tank)
 }
 
 void Bullet::move() {
-    if(x()>35 && x()<655 && y()>40 && y()<655){
+    if(x()>15 && x()<475 && y()>15 && y()<315){
         if(Rotation == 0){
             setPos(x(), y()-8);
         }else if(Rotation == 90){

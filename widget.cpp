@@ -6,9 +6,9 @@ Widget::Widget(QWidget *parent)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
-    scene->setSceneRect(0, 0, 800, 700);
+    scene->setSceneRect(0, 0, 600, 340);
     ui->graphicsView->setScene(scene);
-    ui->graphicsView->setFixedSize(800, 700);
+    ui->graphicsView->setFixedSize(600, 340);
     ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
