@@ -10,19 +10,25 @@ CONFIG += c++17
 
 SOURCES += \
     BasicTank.cpp \
+    Brick.cpp \
     Bullet.cpp \
     Player1.cpp \
     Scene.cpp \
     Tank.cpp \
+    Trees.cpp \
+    Water.cpp \
     main.cpp \
     widget.cpp
 
 HEADERS += \
     BasicTank.h \
+    Brick.h \
     Bullet.h \
     Player1.h \
     Scene.h \
     Tank.h \
+    Trees.h \
+    Water.h \
     widget.h
 
 FORMS += \
