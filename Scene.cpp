@@ -6,6 +6,7 @@
 #include <QGraphicsPixmapItem>
 #include <QKeyEvent>
 #include <QRandomGenerator>
+#include <QDebug>
 
 Scene::Scene(QObject *parent)
     :QGraphicsScene{parent}
@@ -18,7 +19,7 @@ Scene::Scene(QObject *parent)
     addItem(player1);
 
     BasicTank* basicTank = new BasicTank;
-    basicTank->setPos(100,100);
+    basicTank->setPos(10,10);
     addItem(basicTank);
 
     Brick* brick =new Brick;
@@ -119,20 +120,48 @@ Scene::Scene(QObject *parent)
 
 
 void Scene::keyPressEvent(QKeyEvent *event){
+    bool IsBrick = false;
+    bool IsWater = false;
 
-    if (event->key() == Qt::Key_Left && player1->x()>10) {
-        player1->setPos(player1->x()-4,player1->y());
-        player1->Rotate(270);
-    } else if (event->key() == Qt::Key_Right && player1->x()<458) {
-        player1->setPos(player1->x()+4,player1->y());
-        player1->Rotate(90);
-    } else if (event->key() == Qt::Key_Up && player1->y()>10) {
-        player1->setPos(player1->x(),player1->y()-4);
-        player1->Rotate(0);
-    } else if (event->key() == Qt::Key_Down && player1->y()<298) {
-        player1->setPos(player1->x(),player1->y()+4);
-        player1->Rotate(180);
-    }else if (event->key() == Qt::Key_Space && player1->getIsBulletInScene()==0) {
+    QList<QGraphicsItem*> colliding_items = player1->collidingItems();
+    foreach (QGraphicsItem *item, colliding_items) {
+        Brick *brick = dynamic_cast<Brick *>(item);
+        if (brick) {
+            IsBrick = true;
+        }
+        Water *water = dynamic_cast<Water *>(item);
+        if (water) {
+            IsWater = true;
+        }
+    }
+
+    qDebug() << IsBrick << IsWater;
+    if(IsBrick==0 && IsWater==0){
+        if (event->key() == Qt::Key_Left && player1->x()>10) {
+            player1->setPos(player1->x()-4,player1->y());
+            player1->Rotate(270);
+        } else if (event->key() == Qt::Key_Right && player1->x()<458) {
+            player1->setPos(player1->x()+4,player1->y());
+            player1->Rotate(90);
+        } else if (event->key() == Qt::Key_Up && player1->y()>10) {
+            player1->setPos(player1->x(),player1->y()-4);
+            player1->Rotate(0);
+        } else if (event->key() == Qt::Key_Down && player1->y()<298) {
+            player1->setPos(player1->x(),player1->y()+4);
+            player1->Rotate(180);
+        }
+    }else{
+        if (player1->getRotation() == 0){
+            player1->setPos(player1->x(),player1->y()+4);
+        }else if (player1->getRotation() == 90){
+            player1->setPos(player1->x()-4,player1->y());
+        }else if(player1->getRotation() == 180){
+            player1->setPos(player1->x(),player1->y()-4);
+        }else if(player1->getRotation() == 270){
+            player1->setPos(player1->x()+4,player1->y());
+        }
+    }
+    if (event->key() == Qt::Key_Space && player1->getIsBulletInScene()==0) {
         player1->getBullet()->setPos(player1->x()+12,player1->y()+12);
         player1->getBullet()->Rotate(player1->getRotation());
         addItem(player1->getBullet());
