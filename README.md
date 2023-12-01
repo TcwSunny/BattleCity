@@ -34,6 +34,7 @@
 * move()
   * 每0.1秒移動4
   * 若超出界線則移動回界線內且轉向
+  * 若撞到 water 和 brick 則稍微退後並轉向
   * 轉向機率四個方向相同
 * *timer
 * isChangingDirection
