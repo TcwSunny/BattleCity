@@ -1,7 +1,8 @@
 #include "BasicTank.h"
 #include <QRandomGenerator>
 #include <Qtimer>
-
+#include "Brick.h"
+#include "Water.h"
 BasicTank::BasicTank()
 {
     QPixmap pixmap(":/images/Images/Tank_Enemy1.png");
@@ -19,6 +20,26 @@ BasicTank::BasicTank()
 void BasicTank::move()
 {
     if (x() >= 10 && x() <= 458 && y() >= 10 && y() <= 298){
+        // Check for collisions with bricks
+        QList<QGraphicsItem *> collidingItemsList = collidingItems();
+        foreach(QGraphicsItem* item, collidingItemsList) {
+            if (dynamic_cast<Brick*>(item) or dynamic_cast<Water*>(item)) {
+                // Collided with a brick, change direction
+                int newRotation = QRandomGenerator::global()->bounded(0, 4) * 90;
+                if(getRotation()==0 or getRotation()==360){
+                    setPos(x(), y() + 4);
+                } else if (getRotation() == 90) {
+                setPos(x() - 4, y()); // 向右移動 4 個單位
+                } else if (getRotation() == 180) {
+                    setPos(x(), y() - 4); // 向下移動 4 個單位
+                } else if (getRotation() == 270) {
+                    setPos(x() + 4, y()); // 向左移動 4 個單位
+                }
+                Rotate(newRotation);
+                return;
+            }
+        }
+
         if (getRotation() == 0 or getRotation() == 360) {
             setPos(x(), y() - 4); // 向上移動 4 個單位
         } else if (getRotation() == 90) {
