@@ -2,7 +2,9 @@
 #include <QRandomGenerator>
 #include <Qtimer>
 #include "Brick.h"
+#include "Bullet.h"
 #include "Water.h"
+#include "QGraphicsScene"
 BasicTank::BasicTank()
 {
     QPixmap pixmap(":/images/Images/Tank_Enemy1.png");
@@ -15,6 +17,32 @@ BasicTank::BasicTank()
     timer = new QTimer(this);//跟著Bullet Delete掉
     connect(timer, &QTimer::timeout, this, &BasicTank::move);//當發生time out時使用這個物件的move處理
     timer->start(100); // fires every 50ms
+
+    bullet = new Bullet(this);
+    timerBullet = new QTimer();
+    connect(timerBullet, &QTimer::timeout, this, &BasicTank::enemyShootBullet);
+    timerBullet->start(3000);
+
+}
+
+Bullet *BasicTank::getBullet() const
+{
+    return bullet;
+}
+
+void BasicTank::setBullet(Bullet *newBullet)
+{
+    bullet = newBullet;
+}
+
+void BasicTank::enemyShootBullet()
+{
+    if (this->getIsBulletInScene()==0) {
+        this->getBullet()->setPos(this->x()+12,this->y()+12);
+        this->getBullet()->Rotate(this->getRotation());
+        scene()->addItem(this->getBullet());
+        this->setIsBulletInScene(1);
+    }
 }
 
 void BasicTank::move()
