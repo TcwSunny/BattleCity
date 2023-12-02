@@ -1,3 +1,4 @@
+#include "Brick.h"
 #include "Bullet.h"
 #include "Tank.h"
 #include "Brick.h"
@@ -18,6 +19,22 @@ Bullet::Bullet(Tank *tank)
 }
 
 void Bullet::move() {
+
+    QList<QGraphicsItem *> colliding_items = collidingItems();//取得相撞物件清單
+    foreach (QGraphicsItem *item, colliding_items) {//對每個item辨別enemy
+        Brick * brick = dynamic_cast<Brick*>(item);//轉型，不是enemy則傳回none
+        if (brick) {
+
+            // Remove from the scene first
+            scene()->removeItem(brick);
+            scene()->removeItem(this);
+            // Delete from the memory
+            delete brick;
+            Parent->setIsBulletInScene(false);
+            return; // important
+        }
+    }
+
     if(x()>15 && x()<475 && y()>15 && y()<315){
 
         // Check for collisions with bricks
