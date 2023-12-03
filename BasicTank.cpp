@@ -18,8 +18,32 @@ BasicTank::BasicTank()
     connect(timer, &QTimer::timeout, this, &BasicTank::move);//當發生time out時使用這個物件的move處理
     timer->start(100); // fires every 50ms
 
+    bullet = new EnemyBullet(this);
+    timerBullet = new QTimer();
+    connect(timerBullet, &QTimer::timeout, this, &BasicTank::enemyShootBullet);
+    timerBullet->start(3000);
+
 }
 
+EnemyBullet *BasicTank::getBullet() const
+{
+    return bullet;
+}
+
+void BasicTank::setBullet(EnemyBullet *newBullet)
+{
+    bullet = newBullet;
+}
+
+void BasicTank::enemyShootBullet()
+{
+    if (this->getIsBulletInScene()==0) {
+        this->getBullet()->setPos(this->x()+12,this->y()+12);
+        this->getBullet()->Rotate(this->getRotation());
+        scene()->addItem(this->getBullet());
+        this->setIsBulletInScene(1);
+    }
+}
 void BasicTank::move()
 {
     if (x() >= 10 && x() <= 458 && y() >= 10 && y() <= 298){
