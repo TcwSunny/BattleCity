@@ -4,7 +4,12 @@
 #include "Brick.h"
 #include "Bullet.h"
 #include "Water.h"
+<<<<<<< HEAD
 #include "QGraphicsScene"
+=======
+#include "Scene.h"
+
+>>>>>>> c77999523b9164060937412abd99af0833f9ad62
 BasicTank::BasicTank()
 {
     QPixmap pixmap(":/images/Images/Tank_Enemy1.png");
@@ -18,6 +23,7 @@ BasicTank::BasicTank()
     connect(timer, &QTimer::timeout, this, &BasicTank::move);//當發生time out時使用這個物件的move處理
     timer->start(100); // fires every 50ms
 
+<<<<<<< HEAD
     bullet = new Bullet(this);
     timerBullet = new QTimer();
     connect(timerBullet, &QTimer::timeout, this, &BasicTank::enemyShootBullet);
@@ -43,6 +49,8 @@ void BasicTank::enemyShootBullet()
         scene()->addItem(this->getBullet());
         this->setIsBulletInScene(1);
     }
+=======
+>>>>>>> c77999523b9164060937412abd99af0833f9ad62
 }
 
 void BasicTank::move()

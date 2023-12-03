@@ -13,6 +13,7 @@ class Scene : public QGraphicsScene
     Q_OBJECT
 public:
     explicit Scene(QObject *parent = nullptr);
+public slots:
 
 private:
     Player1 *player1;

@@ -12,8 +12,13 @@ SOURCES += \
     BasicTank.cpp \
     Brick.cpp \
     Bullet.cpp \
+<<<<<<< HEAD
     FastTank.cpp \
+=======
+    EnemyBullet.cpp \
+>>>>>>> c77999523b9164060937412abd99af0833f9ad62
     Player1.cpp \
+    PlayerBullet.cpp \
     Scene.cpp \
     Tank.cpp \
     Trees.cpp \
@@ -25,8 +30,13 @@ HEADERS += \
     BasicTank.h \
     Brick.h \
     Bullet.h \
+<<<<<<< HEAD
     FastTank.h \
+=======
+    EnemyBullet.h \
+>>>>>>> c77999523b9164060937412abd99af0833f9ad62
     Player1.h \
+    PlayerBullet.h \
     Scene.h \
     Tank.h \
     Trees.h \
