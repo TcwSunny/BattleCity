@@ -12,6 +12,7 @@ SOURCES += \
     BasicTank.cpp \
     Brick.cpp \
     Bullet.cpp \
+    FastTank.cpp \
     Player1.cpp \
     Scene.cpp \
     Tank.cpp \
@@ -24,6 +25,7 @@ HEADERS += \
     BasicTank.h \
     Brick.h \
     Bullet.h \
+    FastTank.h \
     Player1.h \
     Scene.h \
     Tank.h \

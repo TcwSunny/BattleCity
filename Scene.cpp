@@ -1,4 +1,5 @@
 #include "BasicTank.h"
+#include "FastTank.h"
 #include "Brick.h"
 #include "Scene.h"
 #include "Water.h"
@@ -21,6 +22,10 @@ Scene::Scene(QObject *parent)
     BasicTank* basicTank = new BasicTank;
     basicTank->setPos(10,10);
     addItem(basicTank);
+
+    FastTank* fastTank = new FastTank;
+    fastTank->setPos(490,10);
+    addItem(fastTank);
 
     Brick* brick =new Brick;
     brick->setPos(202,266);

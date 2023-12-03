@@ -72,8 +72,8 @@ void BasicTank::move()
                 return;
             }
         }
-        int probToRotate = QRandomGenerator::global()->bounded(0, 30) ;
-        if(probToRotate == 1){
+        int probToRotate = QRandomGenerator::global()->bounded(0, 50) ;
+        if(probToRotate == 1){ //讓basicTank有隨機轉彎的機會
             int newRotation = QRandomGenerator::global()->bounded(0, 4) * 90;
             Rotate(newRotation);
             qDebug() << getRotation();
