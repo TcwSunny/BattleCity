@@ -72,7 +72,12 @@ void BasicTank::move()
                 return;
             }
         }
-
+        int probToRotate = QRandomGenerator::global()->bounded(0, 30) ;
+        if(probToRotate == 1){
+            int newRotation = QRandomGenerator::global()->bounded(0, 4) * 90;
+            Rotate(newRotation);
+            qDebug() << getRotation();
+        }
         if (getRotation() == 0 or getRotation() == 360) {
             setPos(x(), y() - 4); // 向上移動 4 個單位
         } else if (getRotation() == 90) {
