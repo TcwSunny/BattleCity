@@ -11,21 +11,21 @@ class Bullet : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Bullet(Tank *tank);
+    Bullet();
 
-    int getRotation() const;
-    void setRotation(int newRotation);
+    virtual int getRotation() const;
+    virtual void setRotation(int newRotation);
 
-    Tank *getParent() const;
-    void setParent(Tank *newParent);
+    virtual Tank *getParent() const;
+    virtual void setParent(Tank *newParent);
 
 public slots:
-    void move();
-    void Rotate(int x);
+    virtual void move();
+    virtual void Rotate(int x);
 
 signals:
 
-private:
+protected:
     QTimer *timer;
     int Rotation;
     Tank *Parent;

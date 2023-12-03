@@ -3,6 +3,8 @@
 #include <Qtimer>
 #include "Brick.h"
 #include "Water.h"
+#include "Scene.h"
+
 BasicTank::BasicTank()
 {
     QPixmap pixmap(":/images/Images/Tank_Enemy1.png");
@@ -15,6 +17,7 @@ BasicTank::BasicTank()
     timer = new QTimer(this);//跟著Bullet Delete掉
     connect(timer, &QTimer::timeout, this, &BasicTank::move);//當發生time out時使用這個物件的move處理
     timer->start(100); // fires every 50ms
+
 }
 
 void BasicTank::move()

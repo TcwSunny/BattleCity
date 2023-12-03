@@ -2,6 +2,7 @@
 #define PLAYER1_H
 
 #include "Tank.h"
+#include "PlayerBullet.h"
 
 #include <QObject>
 #include <QGraphicsPixmapItem>
@@ -12,12 +13,16 @@ class Player1 : public Tank
 public:
     explicit Player1();
 
-    Bullet *getBullet() const;
-    void setBullet(Bullet *newBullet);
+    PlayerBullet *getBullet() const;
+    void setBullet(PlayerBullet *newBullet);
+
+    int getHealth() const;
+    void setHealth(int newHealth);
 
 signals:
 private:
-    Bullet *bullet;
+    PlayerBullet *bullet;
+    int Health;
 
 };
 

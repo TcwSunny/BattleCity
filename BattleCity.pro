@@ -12,7 +12,9 @@ SOURCES += \
     BasicTank.cpp \
     Brick.cpp \
     Bullet.cpp \
+    EnemyBullet.cpp \
     Player1.cpp \
+    PlayerBullet.cpp \
     Scene.cpp \
     Tank.cpp \
     Trees.cpp \
@@ -24,7 +26,9 @@ HEADERS += \
     BasicTank.h \
     Brick.h \
     Bullet.h \
+    EnemyBullet.h \
     Player1.h \
+    PlayerBullet.h \
     Scene.h \
     Tank.h \
     Trees.h \
