@@ -58,6 +58,9 @@ Scene::Scene(QObject *parent)
     Brick* brick12 =new Brick;
     brick12->setPos(270,10);
     addItem(brick12);
+    Brick* brick13 =new Brick;
+    brick13->setPos(270-32,10);
+    addItem(brick13);
 
     Water* water = new Water;
     water -> setPos(298,170);
