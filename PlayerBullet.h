@@ -9,6 +9,8 @@ class PlayerBullet : public Bullet
 {
 public:
     PlayerBullet(Tank *tank);
+public slots:
+   // void move();
 };
 
 #endif // PLAYERBULLET_H

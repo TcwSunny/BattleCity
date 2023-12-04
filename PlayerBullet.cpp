@@ -1,5 +1,6 @@
 #include "PlayerBullet.h"
-
+#include "Brick.h"
+#include "Tank.h"
 #include <QObject>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
@@ -16,3 +17,4 @@ PlayerBullet::PlayerBullet(Tank *tank) : Bullet(tank) {
 
     Parent = tank;
 }
+

@@ -7,6 +7,8 @@ class EnemyBullet :public Bullet
 {
 public:
     EnemyBullet(Tank *tank);
+public slots:
+ //   void move();
 
 signals:
 
