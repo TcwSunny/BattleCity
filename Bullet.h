@@ -11,7 +11,7 @@ class Bullet : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Bullet();
+    Bullet(Tank *tank);
 
     virtual int getRotation() const;
     virtual void setRotation(int newRotation);

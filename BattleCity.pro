@@ -12,11 +12,8 @@ SOURCES += \
     BasicTank.cpp \
     Brick.cpp \
     Bullet.cpp \
-<<<<<<< HEAD
-    FastTank.cpp \
-=======
     EnemyBullet.cpp \
->>>>>>> c77999523b9164060937412abd99af0833f9ad62
+    FastTank.cpp \
     Player1.cpp \
     PlayerBullet.cpp \
     Scene.cpp \
@@ -30,11 +27,8 @@ HEADERS += \
     BasicTank.h \
     Brick.h \
     Bullet.h \
-<<<<<<< HEAD
-    FastTank.h \
-=======
     EnemyBullet.h \
->>>>>>> c77999523b9164060937412abd99af0833f9ad62
+    FastTank.h \
     Player1.h \
     PlayerBullet.h \
     Scene.h \
@@ -52,4 +46,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
+    res.qrc \
     res.qrc
+
+DISTFILES += \
+    BattleCity.pro.user \
+    LICENSE \
+    README.md
