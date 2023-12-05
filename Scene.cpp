@@ -149,7 +149,6 @@ void Scene::keyPressEvent(QKeyEvent *event){
         }
     }
 
-    qDebug() << IsBrick << IsWater;
     if(IsBrick==0 && IsWater==0){
         if (event->key() == Qt::Key_Left && player1->x()>10) {
             player1->setPos(player1->x()-4,player1->y());

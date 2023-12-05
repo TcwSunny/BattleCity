@@ -20,19 +20,19 @@ BasicTank::BasicTank()
     connect(timer, &QTimer::timeout, this, &BasicTank::move);//當發生time out時使用這個物件的move處理
     timer->start(100); // fires every 50ms
 
-    bullet = new Bullet(this);
+    bullet = new EnemyBullet(this);
     timerBullet = new QTimer();
     connect(timerBullet, &QTimer::timeout, this, &BasicTank::enemyShootBullet);
     timerBullet->start(3000);
 
 }
 
-Bullet *BasicTank::getBullet() const
+EnemyBullet *BasicTank::getBullet() const
 {
     return bullet;
 }
 
-void BasicTank::setBullet(Bullet *newBullet)
+void BasicTank::setBullet(EnemyBullet *newBullet)
 {
     bullet = newBullet;
 }
@@ -70,7 +70,6 @@ void BasicTank::move()
                     newRotation = QRandomGenerator::global()->bounded(0, 4) * 90;
                 }
                 Rotate(newRotation);
-                qDebug() << getRotation();
                 return;
             }
         }
@@ -78,7 +77,6 @@ void BasicTank::move()
         if(probToRotate == 1){ //讓basicTank有隨機轉彎的機會
             int newRotation = QRandomGenerator::global()->bounded(0, 4) * 90;
             Rotate(newRotation);
-            qDebug() << getRotation();
         }
         if (getRotation() == 0 or getRotation() == 360) {
             setPos(x(), y() - 4); // 向上移動 4 個單位
@@ -106,7 +104,6 @@ void BasicTank::move()
                 newRotation = QRandomGenerator::global()->bounded(0, 4) * 90;
             }
             Rotate(newRotation);
-            qDebug() << getRotation();
         }
     }
     isChangingDirection = false;

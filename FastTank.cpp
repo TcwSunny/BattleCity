@@ -42,7 +42,6 @@ void FastTank::move()
                     newRotation = QRandomGenerator::global()->bounded(0, 4) * 90;
                 }
                 Rotate(newRotation);
-                qDebug() << getRotation();
                 return;
             }
         }
@@ -50,7 +49,6 @@ void FastTank::move()
         if(probToRotate == 1){ //讓basicTank有隨機轉彎的機會
             int newRotation = QRandomGenerator::global()->bounded(0, 4) * 90;
             Rotate(newRotation);
-            qDebug() << getRotation();
         }
         if (getRotation() == 0 or getRotation() == 360) {
             setPos(x(), y() - 4); // 向上移動 4 個單位
@@ -77,8 +75,6 @@ void FastTank::move()
             while(newRotation == getRotation()){ //改善tank重複撞牆的窘境
                 newRotation = QRandomGenerator::global()->bounded(0, 4) * 90;
             }
-            Rotate(newRotation);
-            qDebug() << getRotation();
         }
     }
     isChangingDirection = false;

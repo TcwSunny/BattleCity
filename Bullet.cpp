@@ -2,6 +2,7 @@
 #include "Bullet.h"
 #include "Tank.h"
 #include "Brick.h"
+#include "Player1.h"
 #include <QGraphicsScene>
 #include <QList>
 #include <QDebug>
@@ -17,6 +18,18 @@ Bullet::Bullet(Tank *tank)
     Parent = tank;
 }
 
+
+
+void Bullet::Rotate(int x)
+{
+    QPointF c = boundingRect().center();
+    QTransform t;
+    t.translate(c.x(), c.y());
+    t.rotate(x);
+    t.translate(-c.x(), -c.y());
+    setTransform(t);
+    Rotation = x;
+}
 void Bullet::move() {
 
     QList<QGraphicsItem *> colliding_items = collidingItems();//取得相撞物件清單
@@ -45,10 +58,6 @@ void Bullet::move() {
                 scene()->removeItem(this);
                 Parent->setIsBulletInScene(0);
 
-                // Remove brick from the scene
-
-                //scene()->removeItem(item); //會crashed
-                //delete item;  // optional, if you want to free memory
                 break;
             }
         }
@@ -69,18 +78,6 @@ void Bullet::move() {
         }
     }
 }
-
-void Bullet::Rotate(int x)
-{
-    QPointF c = boundingRect().center();
-    QTransform t;
-    t.translate(c.x(), c.y());
-    t.rotate(x);
-    t.translate(-c.x(), -c.y());
-    setTransform(t);
-    Rotation = x;
-}
-
 Tank *Bullet::getParent() const
 {
     return Parent;

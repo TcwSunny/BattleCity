@@ -10,8 +10,8 @@ class BasicTank: public Tank
 {
 public:
     BasicTank();
-    Bullet *getBullet() const;
-    void setBullet(Bullet *newBullet);
+    EnemyBullet *getBullet() const;
+    void setBullet(EnemyBullet *newBullet);
     void enemyShootBullet();
 
 public slots:
@@ -21,7 +21,7 @@ private:
     QTimer *timer;
     QTimer *timerBullet;
     bool isChangingDirection;
-    Bullet *bullet;
+    EnemyBullet *bullet;
 };
 
 
