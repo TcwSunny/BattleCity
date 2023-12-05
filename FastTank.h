@@ -10,8 +10,6 @@ public:
 public slots:
     void move();
 
-
-
 signals:
 private:
     QTimer *timer;

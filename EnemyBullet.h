@@ -7,7 +7,10 @@ class EnemyBullet :public Bullet
 {
 public:
     EnemyBullet(Tank *tank);
+
     void move();
+
+
 signals:
 
 private:

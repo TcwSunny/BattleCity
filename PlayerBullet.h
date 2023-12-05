@@ -9,7 +9,9 @@ class PlayerBullet : public Bullet
 {
 public:
     PlayerBullet(Tank *tank);
+
     void move();
+
 };
 
 #endif // PLAYERBULLET_H

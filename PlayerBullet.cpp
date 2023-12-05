@@ -21,9 +21,9 @@ PlayerBullet::PlayerBullet(Tank *tank) : Bullet(tank) {
 }
 void PlayerBullet::move() {
 
-    QList<QGraphicsItem *> colliding_items = collidingItems();//å–å¾—ç›¸æ’ç‰©ä»¶æ¸…å–®
-    foreach (QGraphicsItem *item, colliding_items) {//å°æ¯å€‹itemè¾¨åˆ¥enemy
-        Brick * brick = dynamic_cast<Brick*>(item);//è½‰å‹ï¼Œä¸æ˜¯enemyå‰‡å‚³å›none
+    QList<QGraphicsItem *> colliding_items = collidingItems();//¨ú±o¬Û¼²ª«¥ó²M³æ
+    foreach (QGraphicsItem *item, colliding_items) {//¹ï¨C­Óitem¿ë§Oenemy
+        Brick * brick = dynamic_cast<Brick*>(item);//Âà«¬¡A¤£¬Oenemy«h¶Ç¦^none
         if (brick) {
 
             // Remove from the scene first
@@ -49,7 +49,7 @@ void PlayerBullet::move() {
 
                 // Remove brick from the scene
 
-                //scene()->removeItem(item); //æœƒcrashed
+                //scene()->removeItem(item); //·|crashed
                 //delete item;  // optional, if you want to free memory
 
             }
