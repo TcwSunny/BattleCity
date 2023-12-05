@@ -60,6 +60,7 @@ void FastTank::move()
             setPos(x() - 4, y()); // 向左移動 4 個單位
         }
     } else {
+        qDebug()<<isChangingDirection;
         if (x() < 10){
             setPos(10,y());
         }else if (x() > 458){
@@ -75,6 +76,7 @@ void FastTank::move()
             while(newRotation == getRotation()){ //改善tank重複撞牆的窘境
                 newRotation = QRandomGenerator::global()->bounded(0, 4) * 90;
             }
+             Rotate(newRotation);
         }
     }
     isChangingDirection = false;
