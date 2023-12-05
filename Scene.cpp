@@ -8,6 +8,7 @@
 #include <QKeyEvent>
 #include <QRandomGenerator>
 #include <QDebug>
+#include <QTimer>
 
 Scene::Scene(QObject *parent)
     :QGraphicsScene{parent}
@@ -188,4 +189,41 @@ void Scene::generateLevelOne()
     addItem(tree9);
     addItem(tree10);
     addItem(tree11);
+
+    //QTimer::singleShot(5000, this, &Scene::clearLevelOne);
 }
+
+
+void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
+    {
+        // 清除所有Brick
+        QList<QGraphicsItem*> brickItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
+        for (QGraphicsItem* item : brickItems) {
+            Brick* brick = dynamic_cast<Brick*>(item);
+            if (brick) {
+                removeItem(brick);
+                delete brick;
+            }
+        }
+
+        // 清除所有Water
+        QList<QGraphicsItem*> waterItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
+        for (QGraphicsItem* item : waterItems) {
+            Water* water = dynamic_cast<Water*>(item);
+            if (water) {
+                removeItem(water);
+                delete water;
+            }
+        }
+
+        // 清除所有Tree
+        QList<QGraphicsItem*> treeItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
+        for (QGraphicsItem* item : treeItems) {
+            Trees* tree = dynamic_cast<Trees*>(item);
+            if (tree) {
+                removeItem(tree);
+                delete tree;
+            }
+        }
+    }
+

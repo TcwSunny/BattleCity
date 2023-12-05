@@ -14,7 +14,7 @@ class Scene : public QGraphicsScene
 public:
     explicit Scene(QObject *parent = nullptr);
     void generateLevelOne();
-public slots:
+    void clearLevelOne();
 
 private:
     Player1 *player1;
