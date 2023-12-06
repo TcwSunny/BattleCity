@@ -1,6 +1,7 @@
 #include "Brick.h"
 #include "EnemyBullet.h"
 #include "Player1.h"
+#include "Scene.h"
 
 #include <QObject>
 #include <QGraphicsPixmapItem>
@@ -16,7 +17,7 @@ EnemyBullet::EnemyBullet(Tank *tank):Bullet(tank)
 
     timer = new QTimer(this);//跟著Bullet Delete掉
     connect(timer, &QTimer::timeout, this, &EnemyBullet::move);//當發生time out時使用這個物件的move處理
-    timer->start(50); // fires every 50ms
+    timer->start(1000); // 移動速度
     Parent = tank;
 }
 void EnemyBullet::move() {
@@ -61,6 +62,7 @@ void EnemyBullet::move() {
                 int playerHealth = player->getHealth(); // 確保這個呼叫正確
                 player->setHealth(playerHealth - 1);
                 qDebug() << playerHealth-1;
+
             }
             break;
         }

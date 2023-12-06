@@ -15,10 +15,15 @@ public:
     explicit Scene(QObject *parent = nullptr);
     void generateLevelOne();
     void clearLevelOne();
+    void updateHealthText();
 
 private:
     Player1 *player1;
     Bullet *bullet1;
+
+    QGraphicsTextItem *healthText;
+
+    QTimer *healthTimer;
 
 
     // QGraphicsScene interface

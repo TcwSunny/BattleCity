@@ -17,7 +17,10 @@ FastTank::FastTank()
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &FastTank::move);//當發生time out時使用這個物件的move處理
     timer->start(50);
+
 }
+
+
 
 void FastTank::move()
 {

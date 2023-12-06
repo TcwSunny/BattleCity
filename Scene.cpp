@@ -29,6 +29,17 @@ Scene::Scene(QObject *parent)
     addItem(fastTank);
 
 
+    healthText = new QGraphicsTextItem();
+    healthText->setPos(510,288); // Adjust the position as needed
+    QColor textColor(Qt::white); // Example: White text color
+    healthText->setDefaultTextColor(textColor);
+    addItem(healthText);
+    updateHealthText();
+
+    healthTimer= new QTimer();
+    connect(healthTimer, &QTimer::timeout, this, &Scene::updateHealthText);
+    healthTimer->start(500);
+
 
 
     generateLevelOne();
@@ -225,5 +236,11 @@ void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
                 delete tree;
             }
         }
+    }
+
+    void Scene::updateHealthText()
+    {
+        QString healthStr = QString("Health : %2").arg(player1->getHealth());
+        healthText->setPlainText(healthStr);
     }
 
