@@ -14,6 +14,7 @@ class Scene : public QGraphicsScene
 public:
     explicit Scene(QObject *parent = nullptr);
     void generateLevelOne();
+    void generateLevelTwo();
     void clearLevelOne();
     void updateHealthText();
 

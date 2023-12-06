@@ -43,7 +43,7 @@ Scene::Scene(QObject *parent)
 
 
     generateLevelOne();
-
+    //generateLevelTwo();
 }
 
 
@@ -202,6 +202,64 @@ void Scene::generateLevelOne()
     addItem(tree11);
 
     //QTimer::singleShot(5000, this, &Scene::clearLevelOne);
+}
+
+void Scene::generateLevelTwo()
+{
+    Brick* brick =new Brick;
+    brick->setPos(10,266);
+    addItem(brick);
+    for(int i = 1;i<=13;i++){
+        Water* water =new Water;
+        water->setPos(10+i*32,266);
+        addItem(water);
+        Brick* brick =new Brick;
+        brick->setPos(10+i*32,266);
+        addItem(brick);
+
+    }
+    for(int i = 0;i<=6;i++){
+        Brick* brick =new Brick;
+        brick->setPos(426,234-i*32);
+        addItem(brick);
+    }
+    for(int i = 0;i<=11;i++){
+        Water* water =new Water;
+        water->setPos(42+i*32,42);
+        addItem(water);
+        Brick* brick =new Brick;
+        brick->setPos(42+i*32,42);
+        addItem(brick);
+    }
+    for(int i = 0;i<=4;i++){
+        Brick* brick =new Brick;
+        brick->setPos(42,74+i*32);
+        addItem(brick);
+    }
+    for(int i = 0;i<=9;i++){
+        Brick* brick =new Brick;
+        brick->setPos(74+i*32,202);
+        addItem(brick);
+    }
+
+    for(int i = 0;i<=2;i++){
+        Brick* brick =new Brick;
+        brick->setPos(362,170-i*32);
+        addItem(brick);
+    }
+    for(int i = 0;i<=7;i++){
+        Brick* brick =new Brick;
+        brick->setPos(106+i*32,106);
+        addItem(brick);
+    }
+    for(int i = 0;i<=7;i++){
+        Water* water =new Water;
+        water->setPos(106+i*32,138);
+        addItem(water);
+        Water* water2 =new Water;
+        water2->setPos(106+i*32,170);
+        addItem(water2);
+    }
 }
 
 
