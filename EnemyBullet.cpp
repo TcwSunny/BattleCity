@@ -11,13 +11,13 @@
 #include <QTimer>
 
 
-EnemyBullet::EnemyBullet(Tank *tank):Bullet(tank)
+EnemyBullet::EnemyBullet(Tank *tank,int speed):Bullet(tank)
 {
     setPixmap(QPixmap(":/images/Images/bullet.png"));
 
     timer = new QTimer(this);//跟著Bullet Delete掉
     connect(timer, &QTimer::timeout, this, &EnemyBullet::move);//當發生time out時使用這個物件的move處理
-    timer->start(1000); // 移動速度
+    timer->start(speed); // 移動速度
     Parent = tank;
 }
 void EnemyBullet::move() {
@@ -48,10 +48,6 @@ void EnemyBullet::move() {
                 scene()->removeItem(this);
                 Parent->setIsBulletInScene(0);
 
-                // Remove brick from the scene
-
-                //scene()->removeItem(item); //會crashed
-                //delete item;  // optional, if you want to free memory
 
             }
             if (dynamic_cast<Player1*>(item)) {

@@ -9,11 +9,10 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    BasicTank.cpp \
     Brick.cpp \
     Bullet.cpp \
+    Enemy.cpp \
     EnemyBullet.cpp \
-    FastTank.cpp \
     Player1.cpp \
     PlayerBullet.cpp \
     Scene.cpp \
@@ -24,11 +23,10 @@ SOURCES += \
     widget.cpp
 
 HEADERS += \
-    BasicTank.h \
     Brick.h \
     Bullet.h \
+    Enemy.h \
     EnemyBullet.h \
-    FastTank.h \
     Player1.h \
     PlayerBullet.h \
     Scene.h \

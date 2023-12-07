@@ -16,8 +16,6 @@ public:
     virtual int getRotation() const;
     virtual void setRotation(int newRotation);
 
-    virtual Tank *getParent() const;
-    virtual void setParent(Tank *newParent);
 
 public slots:
     virtual void move();

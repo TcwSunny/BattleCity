@@ -6,7 +6,7 @@
 class EnemyBullet :public Bullet
 {
 public:
-    EnemyBullet(Tank *tank);
+    EnemyBullet(Tank *tank, int speed);
 
     void move();
 

@@ -1,5 +1,4 @@
-#include "BasicTank.h"
-#include "FastTank.h"
+#include "Enemy.h"
 #include "Brick.h"
 #include "Scene.h"
 #include "Water.h"
@@ -20,13 +19,19 @@ Scene::Scene(QObject *parent)
     player1->setPos(10,298);
     addItem(player1);
 
-    BasicTank* basicTank = new BasicTank;
-    basicTank->setPos(10,10);
-    addItem(basicTank);
+    Enemy* enemy = new Enemy;
+    enemy->setPos(10,10);
+    addItem(enemy);
+    enemyTimer= new QTimer();
+    connect(enemyTimer, &QTimer::timeout, this, [=](){
+        int enemyGenetate = QRandomGenerator::global()->bounded(0, 3);
+        Enemy* enemy = new Enemy;
+        enemy->setPos(enemyGenetate*200, 10);
+        addItem(enemy);
+    });
+    enemyTimer->start(4000);
 
-    FastTank* fastTank = new FastTank;
-    fastTank->setPos(490,10);
-    addItem(fastTank);
+
 
 
     healthText = new QGraphicsTextItem();

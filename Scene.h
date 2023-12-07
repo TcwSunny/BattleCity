@@ -25,6 +25,7 @@ private:
     QGraphicsTextItem *healthText;
 
     QTimer *healthTimer;
+    QTimer *enemyTimer;
 
 
     // QGraphicsScene interface

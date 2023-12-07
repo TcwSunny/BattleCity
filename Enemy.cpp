@@ -1,4 +1,4 @@
-#include "BasicTank.h"
+#include "Enemy.h"
 #include <QRandomGenerator>
 #include <Qtimer>
 #include "Brick.h"
@@ -7,37 +7,75 @@
 #include "QGraphicsScene"
 #include "Scene.h"
 
-BasicTank::BasicTank()
+Enemy::Enemy()
 {
-    QPixmap pixmap(":/images/Images/Tank_Enemy1.png");
+    QPixmap pixmap;
+    int enemyState = QRandomGenerator::global()->bounded(1, 5);
+
+    timer = new QTimer(this);//跟著Bullet Delete掉
+    connect(timer, &QTimer::timeout, this, &Enemy::move);//當發生time out時使用這個物件的move處理
+
+
+    switch(enemyState){
+    case 1:
+        pixmap.load(":/images/Images/Tank_Enemy1.png");
+        timer->start(100); // fires every 50ms
+        bullet = new EnemyBullet(this,1000);
+        timerBullet = new QTimer();
+        connect(timerBullet, &QTimer::timeout, this, &Enemy::enemyShootBullet);
+        timerBullet->start(3000);
+        health = 1;
+        break;
+    case 2:
+        pixmap.load(":/images/Images/Tank_Enemy2.png");
+        timer->start(33); // fires every 50ms
+        bullet = new EnemyBullet(this,500);
+        timerBullet = new QTimer();
+        connect(timerBullet, &QTimer::timeout, this, &Enemy::enemyShootBullet);
+        timerBullet->start(3000);
+        health = 1;
+        break;
+    case 3:
+        pixmap.load(":/images/Images/Tank_Enemy3.png");
+        timer->start(50); // fires every 50ms
+        bullet = new EnemyBullet(this,333);
+        timerBullet = new QTimer();
+        connect(timerBullet, &QTimer::timeout, this, &Enemy::enemyShootBullet);
+        timerBullet->start(3000);
+        health = 1;
+        break;
+    case 4:
+        pixmap.load(":/images/Images/Tank_Enemy4.png");
+        timer->start(50); // fires every 50ms
+        bullet = new EnemyBullet(this,500);
+        timerBullet = new QTimer();
+        connect(timerBullet, &QTimer::timeout, this, &Enemy::enemyShootBullet);
+        timerBullet->start(3000);
+        health = 4;
+        break;
+    }
+
     pixmap = pixmap.scaled(QSize(32, 32));
     setPixmap(pixmap);
 
     setRotation(0);
     isChangingDirection = false;
 
-    timer = new QTimer(this);//跟著Bullet Delete掉
-    connect(timer, &QTimer::timeout, this, &BasicTank::move);//當發生time out時使用這個物件的move處理
-    timer->start(100); // fires every 50ms
 
-    bullet = new EnemyBullet(this);
-    timerBullet = new QTimer();
-    connect(timerBullet, &QTimer::timeout, this, &BasicTank::enemyShootBullet);
-    timerBullet->start(3000);
 
 }
 
-EnemyBullet *BasicTank::getBullet() const
+EnemyBullet *Enemy::getBullet() const
 {
     return bullet;
 }
 
-void BasicTank::setBullet(EnemyBullet *newBullet)
+void Enemy::setBullet(EnemyBullet *newBullet)
 {
     bullet = newBullet;
 }
 
-void BasicTank::enemyShootBullet()
+void Enemy::enemyShootBullet()
 {
     if (this->getIsBulletInScene()==0) {
         this->getBullet()->setPos(this->x()+12,this->y()+12);
@@ -47,7 +85,7 @@ void BasicTank::enemyShootBullet()
     }
 }
 
-void BasicTank::move()
+void Enemy::move()
 {
     if (x() >= 10 && x() <= 458 && y() >= 10 && y() <= 298){
         // Check for collisions with bricks
@@ -107,5 +145,15 @@ void BasicTank::move()
         }
     }
     isChangingDirection = false;
+}
+
+int Enemy::getHealth() const
+{
+    return health;
+}
+
+void Enemy::decreaseHealth()
+{
+    health--;
 }
 

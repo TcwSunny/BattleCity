@@ -1,18 +1,21 @@
-#ifndef BASICTANK_H
-#define BASICTANK_H
+#ifndef ENEMY_H
+#define ENEMY_H
 
 #include "EnemyBullet.h"
 #include "Tank.h"
 
 
 
-class BasicTank: public Tank
+class Enemy: public Tank
 {
 public:
-    BasicTank();
+    Enemy();
     EnemyBullet *getBullet() const;
     void setBullet(EnemyBullet *newBullet);
     void enemyShootBullet();
+
+    int getHealth() const;
+    void decreaseHealth();
 
 public slots:
     void move();
@@ -22,7 +25,8 @@ private:
     QTimer *timerBullet;
     bool isChangingDirection;
     EnemyBullet *bullet;
+    int health;
 };
 
 
-#endif // BASICTANK_H
+#endif // ENEMY_H

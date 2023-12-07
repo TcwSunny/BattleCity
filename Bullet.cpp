@@ -78,16 +78,6 @@ void Bullet::move() {
         }
     }
 }
-Tank *Bullet::getParent() const
-{
-    return Parent;
-}
-
-void Bullet::setParent(Tank *newParent)
-{
-    Parent = newParent;
-}
-
 
 
 int Bullet::getRotation() const
