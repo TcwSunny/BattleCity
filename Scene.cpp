@@ -13,24 +13,33 @@ Scene::Scene(QObject *parent)
     :QGraphicsScene{parent}
 {
     QGraphicsPixmapItem *pixItem = new QGraphicsPixmapItem(QPixmap(":/images/Images/backGround.jpg"));
+    pixItem->setZValue(-1);
     addItem(pixItem);
 
     player1 = new Player1;
     player1->setPos(10,298);
+    player1->setZValue(-0.5);
     addItem(player1);
 
     Enemy* enemy = new Enemy;
     enemy->setPos(10,10);
+    enemy->setZValue(-0.5);
     addItem(enemy);
-    enemyTimer= new QTimer();
-    connect(enemyTimer, &QTimer::timeout, this, [=](){
-        int enemyGenetate = QRandomGenerator::global()->bounded(0, 3);
-        Enemy* enemy = new Enemy;
-        enemy->setPos(enemyGenetate*200, 10);
-        addItem(enemy);
+    enemyTimer = new QTimer();
+    connect(enemyTimer, &QTimer::timeout, this, [=]() {
+        static int generatedEnemyCount = 0;
+        if (generatedEnemyCount < 20) {
+            int enemyGenetate = QRandomGenerator::global()->bounded(0, 3);
+            Enemy* enemy = new Enemy;
+            enemy->setPos(enemyGenetate * 200, 10);
+            enemy->setZValue(-0.5);
+            addItem(enemy);
+            generatedEnemyCount++;
+        } else {
+            enemyTimer->stop();  // 生成 20 台敵人坦克後停止計時器
+        }
     });
     enemyTimer->start(4000);
-
 
 
 
