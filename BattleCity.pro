@@ -13,7 +13,7 @@ SOURCES += \
     Bullet.cpp \
     Enemy.cpp \
     EnemyBullet.cpp \
-    Player1.cpp \
+    Player.cpp \
     PlayerBullet.cpp \
     Scene.cpp \
     Tank.cpp \
@@ -27,7 +27,7 @@ HEADERS += \
     Bullet.h \
     Enemy.h \
     EnemyBullet.h \
-    Player1.h \
+    Player.h \
     PlayerBullet.h \
     Scene.h \
     Tank.h \

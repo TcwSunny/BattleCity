@@ -19,5 +19,6 @@
         <file>Images/bullet.png</file>
         <file>Images/stone.png</file>
         <file>Images/water.png</file>
+        <file>Images/EnterScene.png</file>
     </qresource>
 </RCC>

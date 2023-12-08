@@ -2,7 +2,7 @@
 #define SCENE_H
 
 #include "Bullet.h"
-#include "Player1.h"
+#include "Player.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
@@ -19,10 +19,12 @@ public:
     void updateHealthText();
 
 private:
-    Player1 *player1;
+    Player *player1;
+    Player *player2;
     Bullet *bullet1;
 
-    QGraphicsTextItem *healthText;
+    QGraphicsTextItem *healthText1;
+    QGraphicsTextItem *healthText2;
 
     QTimer *healthTimer;
     QTimer *enemyTimer;
@@ -31,6 +33,10 @@ private:
     // QGraphicsScene interface
 protected:
     void keyPressEvent(QKeyEvent *event);
+private:
+    QGraphicsPixmapItem *backGround;
+    bool GameOn;
+    bool twoPlayer;
 };
 
 #endif // SCENE_H

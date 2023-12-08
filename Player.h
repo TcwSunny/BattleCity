@@ -1,5 +1,5 @@
-#ifndef PLAYER1_H
-#define PLAYER1_H
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include "Tank.h"
 #include "PlayerBullet.h"
@@ -7,11 +7,11 @@
 #include <QObject>
 #include <QGraphicsPixmapItem>
 
-class Player1 : public Tank
+class Player : public Tank
 {
     Q_OBJECT
 public:
-    explicit Player1();
+    explicit Player(int num);
 
     PlayerBullet *getBullet() const;
     void setBullet(PlayerBullet *newBullet);
@@ -26,4 +26,4 @@ private:
 
 };
 
-#endif // PLAYER1_H
+#endif // PLAYER_H

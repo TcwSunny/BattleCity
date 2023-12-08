@@ -1,7 +1,7 @@
 #ifndef ENEMYBULLET_H
 #define ENEMYBULLET_H
 #include "Bullet.h"
-#include "Player1.h"
+#include "Player.h"
 
 class EnemyBullet :public Bullet
 {

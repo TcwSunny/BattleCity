@@ -12,14 +12,140 @@
 Scene::Scene(QObject *parent)
     :QGraphicsScene{parent}
 {
-    QGraphicsPixmapItem *pixItem = new QGraphicsPixmapItem(QPixmap(":/images/Images/backGround.jpg"));
-    pixItem->setZValue(-1);
-    addItem(pixItem);
+    backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/EnterScene.png"));
+    backGround->setZValue(-1);
+    addItem(backGround);
+    GameOn = 0;
 
-    player1 = new Player1;
+    //generateLevelTwo();
+}
+
+
+
+
+void Scene::keyPressEvent(QKeyEvent *event){
+    if(GameOn == 1){
+        bool IsBrick = false;
+        bool IsWater = false;
+        QList<QGraphicsItem*> colliding_items = player1->collidingItems();
+        foreach (QGraphicsItem *item, colliding_items) {
+            Brick *brick = dynamic_cast<Brick *>(item);
+            if (brick) {
+                IsBrick = true;
+            }
+            Water *water = dynamic_cast<Water *>(item);
+            if (water) {
+                IsWater = true;
+            }
+        }
+
+        if(IsBrick==0 && IsWater==0){
+            if (event->key() == Qt::Key_Left && player1->x()>10) {
+                player1->setPos(player1->x()-4,player1->y());
+                player1->Rotate(270);
+            } else if (event->key() == Qt::Key_Right && player1->x()<458) {
+                player1->setPos(player1->x()+4,player1->y());
+                player1->Rotate(90);
+            } else if (event->key() == Qt::Key_Up && player1->y()>10) {
+                player1->setPos(player1->x(),player1->y()-4);
+                player1->Rotate(0);
+            } else if (event->key() == Qt::Key_Down && player1->y()<298) {
+                player1->setPos(player1->x(),player1->y()+4);
+                player1->Rotate(180);
+            }
+        }else{
+            if (player1->getRotation() == 0){
+                player1->setPos(player1->x(),player1->y()+4);
+            }else if (player1->getRotation() == 90){
+                player1->setPos(player1->x()-4,player1->y());
+            }else if(player1->getRotation() == 180){
+                player1->setPos(player1->x(),player1->y()-4);
+            }else if(player1->getRotation() == 270){
+                player1->setPos(player1->x()+4,player1->y());
+            }
+        }
+        if (event->key() == Qt::Key_Space && player1->getIsBulletInScene()==0) {
+            player1->getBullet()->setPos(player1->x()+12,player1->y()+12);
+            player1->getBullet()->Rotate(player1->getRotation());
+            addItem(player1->getBullet());
+            player1->setIsBulletInScene(1);
+        }
+        bool IsBrick2 = false;
+        bool IsWater2 = false;
+        QList<QGraphicsItem*> colliding_items2 = player2->collidingItems();
+        foreach (QGraphicsItem *item2, colliding_items2) {
+            Brick *brick = dynamic_cast<Brick *>(item2);
+            if (brick) {
+                IsBrick2 = true;
+            }
+            Water *water = dynamic_cast<Water *>(item2);
+            if (water) {
+                IsWater2 = true;
+            }
+        }
+        if(IsBrick2==0 && IsWater2==0){
+            if (event->key() == Qt::Key_A && player2->x()>10) {
+                player2->setPos(player2->x()-4,player2->y());
+                player2->Rotate(270);
+            } else if (event->key() == Qt::Key_D && player2->x()<458) {
+                player2->setPos(player2->x()+4,player2->y());
+                player2->Rotate(90);
+            } else if (event->key() == Qt::Key_W && player2->y()>10) {
+                player2->setPos(player2->x(),player2->y()-4);
+                player2->Rotate(0);
+            } else if (event->key() == Qt::Key_S && player2->y()<298) {
+                player2->setPos(player2->x(),player2->y()+4);
+                player2->Rotate(180);
+            }
+        }else{
+            if (player2->getRotation() == 0){
+                player2->setPos(player2->x(),player2->y()+4);
+            }else if (player2->getRotation() == 90){
+                player2->setPos(player2->x()-4,player2->y());
+            }else if(player2->getRotation() == 180){
+                player2->setPos(player2->x(),player2->y()-4);
+            }else if(player2->getRotation() == 270){
+                player2->setPos(player2->x()+4,player2->y());
+            }
+        }
+        if (event->key() == Qt::Key_E && player2->getIsBulletInScene()==0) {
+            player2->getBullet()->setPos(player2->x()+12,player2->y()+12);
+            player2->getBullet()->Rotate(player2->getRotation());
+            addItem(player2->getBullet());
+            player2->setIsBulletInScene(1);
+        }
+    }
+    if(GameOn == 0 && (event->key() == Qt::Key_1)){
+        GameOn = 1;
+        twoPlayer = 0;
+        generateLevelOne();
+        qDebug() << "Start";
+    }
+    if(GameOn == 0 && (event->key() == Qt::Key_2)){
+        GameOn = 1;
+        twoPlayer = 1;
+        generateLevelOne();
+        qDebug() << "Start";
+    }
+}
+void Scene::generateLevelOne()
+{
+    backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/backGround.jpg"));
+    backGround->setZValue(-0.75);
+    addItem(backGround);
+
+    player1 = new Player(1);
     player1->setPos(10,298);
     player1->setZValue(-0.5);
     addItem(player1);
+
+    if(twoPlayer){
+        player2 = new Player(2);
+        player2->setPos(300,298);
+        player2->setZValue(-0.5);
+        addItem(player2);
+    }
+
 
     Enemy* enemy = new Enemy;
     enemy->setPos(10,10);
@@ -43,76 +169,22 @@ Scene::Scene(QObject *parent)
 
 
 
-    healthText = new QGraphicsTextItem();
-    healthText->setPos(510,288); // Adjust the position as needed
+    healthText1 = new QGraphicsTextItem();
+    healthText1->setPos(510,288); // Adjust the position as needed
     QColor textColor(Qt::white); // Example: White text color
-    healthText->setDefaultTextColor(textColor);
-    addItem(healthText);
+    healthText1->setDefaultTextColor(textColor);
+    addItem(healthText1);
+    healthText2 = new QGraphicsTextItem();
+    healthText2->setPos(510,300); // Adjust the position as needed
+    QColor textColor2(Qt::white); // Example: White text color
+    healthText2->setDefaultTextColor(textColor2);
+    addItem(healthText2);
     updateHealthText();
 
     healthTimer= new QTimer();
     connect(healthTimer, &QTimer::timeout, this, &Scene::updateHealthText);
     healthTimer->start(500);
 
-
-
-    generateLevelOne();
-    //generateLevelTwo();
-}
-
-
-
-
-void Scene::keyPressEvent(QKeyEvent *event){
-    bool IsBrick = false;
-    bool IsWater = false;
-
-    QList<QGraphicsItem*> colliding_items = player1->collidingItems();
-    foreach (QGraphicsItem *item, colliding_items) {
-        Brick *brick = dynamic_cast<Brick *>(item);
-        if (brick) {
-            IsBrick = true;
-        }
-        Water *water = dynamic_cast<Water *>(item);
-        if (water) {
-            IsWater = true;
-        }
-    }
-
-    if(IsBrick==0 && IsWater==0){
-        if (event->key() == Qt::Key_Left && player1->x()>10) {
-            player1->setPos(player1->x()-4,player1->y());
-            player1->Rotate(270);
-        } else if (event->key() == Qt::Key_Right && player1->x()<458) {
-            player1->setPos(player1->x()+4,player1->y());
-            player1->Rotate(90);
-        } else if (event->key() == Qt::Key_Up && player1->y()>10) {
-            player1->setPos(player1->x(),player1->y()-4);
-            player1->Rotate(0);
-        } else if (event->key() == Qt::Key_Down && player1->y()<298) {
-            player1->setPos(player1->x(),player1->y()+4);
-            player1->Rotate(180);
-        }
-    }else{
-        if (player1->getRotation() == 0){
-            player1->setPos(player1->x(),player1->y()+4);
-        }else if (player1->getRotation() == 90){
-            player1->setPos(player1->x()-4,player1->y());
-        }else if(player1->getRotation() == 180){
-            player1->setPos(player1->x(),player1->y()-4);
-        }else if(player1->getRotation() == 270){
-            player1->setPos(player1->x()+4,player1->y());
-        }
-    }
-    if (event->key() == Qt::Key_Space && player1->getIsBulletInScene()==0) {
-        player1->getBullet()->setPos(player1->x()+12,player1->y()+12);
-        player1->getBullet()->Rotate(player1->getRotation());
-        addItem(player1->getBullet());
-        player1->setIsBulletInScene(1);
-    }
-}
-void Scene::generateLevelOne()
-{
     Brick* brick =new Brick;
     brick->setPos(202,266);
     addItem(brick);
@@ -312,7 +384,10 @@ void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
 
     void Scene::updateHealthText()
     {
-        QString healthStr = QString("Health : %2").arg(player1->getHealth());
-        healthText->setPlainText(healthStr);
+        QString healthStr = QString("Health1 : %2").arg(player1->getHealth());
+        healthText1->setPlainText(healthStr);
+
+        QString healthStr2 = QString("Health2 : %2").arg(player2->getHealth());
+        healthText2->setPlainText(healthStr2);
     }
 

@@ -2,7 +2,7 @@
 #include "Bullet.h"
 #include "Tank.h"
 #include "Brick.h"
-#include "Player1.h"
+#include "Player.h"
 #include <QGraphicsScene>
 #include <QList>
 #include <QDebug>

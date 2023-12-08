@@ -1,6 +1,6 @@
 #include "Brick.h"
 #include "EnemyBullet.h"
-#include "Player1.h"
+#include "Player.h"
 #include "Scene.h"
 
 #include <QObject>
@@ -50,15 +50,13 @@ void EnemyBullet::move() {
 
 
             }
-            if (dynamic_cast<Player1*>(item)) {
+            if (dynamic_cast<Player*>(item)) {
                 // Collided with a brick, remove both the bullet and the brick
                 scene()->removeItem(this);
                 Parent->setIsBulletInScene(0);
-                Player1 *player = dynamic_cast<Player1*>(item);
-                int playerHealth = player->getHealth(); // 確保這個呼叫正確
+                Player *player = dynamic_cast<Player*>(item);
+                int playerHealth = player->getHealth();
                 player->setHealth(playerHealth - 1);
-                qDebug() << playerHealth-1;
-
             }
             break;
         }
