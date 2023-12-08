@@ -17,11 +17,9 @@ Scene::Scene(QObject *parent)
     addItem(backGround);
     GameOn = 0;
 
+
     //generateLevelTwo();
 }
-
-
-
 
 void Scene::keyPressEvent(QKeyEvent *event){
     if(GameOn == 1){
@@ -138,12 +136,13 @@ void Scene::generateLevelOne()
     player1->setPos(10,298);
     player1->setZValue(-0.5);
     addItem(player1);
-    if(twoPlayer){
 
-        player2 = new Player(2);
-        player2->setPos(300,298);
-        player2->setZValue(-0.5);
-        addItem(player2);}
+    player2 = new Player(2);
+    player2->setPos(300,298);
+    player2->setZValue(-0.5);
+    if(twoPlayer){
+        addItem(player2);
+    }
 
 
 
