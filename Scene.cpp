@@ -119,13 +119,13 @@ void Scene::keyPressEvent(QKeyEvent *event){
         GameOn = 1;
         twoPlayer = 0;
         generateLevelOne();
-        qDebug() << "Start";
+        qDebug() << "Start"<<twoPlayer;
     }
     if(GameOn == 0 && (event->key() == Qt::Key_2)){
         GameOn = 1;
         twoPlayer = 1;
         generateLevelOne();
-        qDebug() << "Start";
+        qDebug() << "Start"<<twoPlayer;
     }
 }
 void Scene::generateLevelOne()
@@ -138,13 +138,13 @@ void Scene::generateLevelOne()
     player1->setPos(10,298);
     player1->setZValue(-0.5);
     addItem(player1);
-
     if(twoPlayer){
+
         player2 = new Player(2);
         player2->setPos(300,298);
         player2->setZValue(-0.5);
-        addItem(player2);
-    }
+        addItem(player2);}
+
 
 
     Enemy* enemy = new Enemy;
@@ -184,7 +184,7 @@ void Scene::generateLevelOne()
     healthTimer= new QTimer();
     connect(healthTimer, &QTimer::timeout, this, &Scene::updateHealthText);
     healthTimer->start(500);
-
+    for(int i= 0;i<5;i++){ //把堡壘的牆壁改厚一點 打五次才會消失
     Brick* brick =new Brick;
     brick->setPos(202,266);
     addItem(brick);
@@ -199,7 +199,8 @@ void Scene::generateLevelOne()
     addItem(brick4);
     Brick* brick5 =new Brick;
     brick5->setPos(266,298);
-    addItem(brick5);
+    addItem(brick5);}
+
     Brick* brick6 =new Brick;
     brick6->setPos(74,106);
     addItem(brick6);
@@ -275,6 +276,17 @@ void Scene::generateLevelOne()
     tree9->setPos(458,10);
     tree10->setPos(458,74);
     tree11->setPos(458,138);
+    tree->setZValue(1);
+    tree2->setZValue(1);
+    tree3->setZValue(1);
+    tree4->setZValue(1);
+    tree5->setZValue(1);
+    tree6->setZValue(1);
+    tree7->setZValue(1);
+    tree8->setZValue(1);
+    tree9->setZValue(1);
+    tree10->setZValue(1);
+    tree11->setZValue(1);
     addItem(tree);
     addItem(tree2);
     addItem(tree3);

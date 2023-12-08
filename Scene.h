@@ -36,7 +36,7 @@ protected:
 private:
     QGraphicsPixmapItem *backGround;
     bool GameOn;
-    bool twoPlayer;
+    int twoPlayer;
 };
 
 #endif // SCENE_H
