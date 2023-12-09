@@ -14,6 +14,7 @@ public:
 
 signals:
     void playerDie(Player* player);
+    void castleDie();
 private:
 };
 

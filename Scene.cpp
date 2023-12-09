@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "Water.h"
 #include "Trees.h"
+#include "Castle.h"
 #include <QGraphicsPixmapItem>
 #include <QKeyEvent>
 #include <QRandomGenerator>
@@ -159,6 +160,7 @@ void Scene::generateLevelOne()
             int enemyGenetate = QRandomGenerator::global()->bounded(0, 3);
             Enemy* enemy = new Enemy;
             connect(enemy->getBullet(),&EnemyBullet::playerDie,this,&Scene::updateGameState);
+
             enemy->setPos(enemyGenetate * 200, 10);
             enemy->setZValue(-0.5);
             addItem(enemy);
@@ -301,6 +303,13 @@ void Scene::generateLevelOne()
     addItem(tree10);
     addItem(tree11);
 
+    Castle* castle = new Castle;
+    castle->setPos(234,298);
+    addItem(castle);
+
+
+    connect(enemy->getBullet(),&EnemyBullet::castleDie,this,&Scene::clearLevelOne);
+
     //QTimer::singleShot(5000, this, &Scene::clearLevelOne);
 }
 
@@ -393,6 +402,15 @@ void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
             if (tree) {
                 removeItem(tree);
                 delete tree;
+            }
+        }
+        // 清除所有bitch
+        QList<QGraphicsItem*> bitch = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
+        for (QGraphicsItem* item : bitch) {
+            Castle* bitch = dynamic_cast<Castle*>(item);
+            if (bitch) {
+                removeItem(bitch);
+                delete bitch;
             }
         }
         QList<QGraphicsItem*> tank = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);

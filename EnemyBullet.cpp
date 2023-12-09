@@ -1,6 +1,7 @@
 #include "Brick.h"
 #include "EnemyBullet.h"
 #include "Player.h"
+#include "Castle.h"
 #include "Scene.h"
 
 #include <QObject>
@@ -61,6 +62,10 @@ void EnemyBullet::move() {
                     emit playerDie(player);
                     qDebug() << "Die";
                 }
+            }else if(dynamic_cast<Castle*>(item)){
+                scene()->removeItem(this);
+                Parent->setIsBulletInScene(0);
+                emit castleDie();
             }
             break;
         }
