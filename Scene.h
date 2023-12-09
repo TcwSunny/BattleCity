@@ -36,7 +36,6 @@ private:
     // QGraphicsScene interface
 protected:
     void keyPressEvent(QKeyEvent *event);
-
 };
 
 #endif // SCENE_H
