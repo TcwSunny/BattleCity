@@ -57,6 +57,10 @@ void EnemyBullet::move() {
                 Player *player = dynamic_cast<Player*>(item);
                 int playerHealth = player->getHealth();
                 player->setHealth(playerHealth - 1);
+                if(player->getHealth()==0){
+                    emit playerDie(player);
+                    qDebug() << "Die";
+                }
             }
             break;
         }

@@ -70,50 +70,53 @@ void Scene::keyPressEvent(QKeyEvent *event){
             addItem(player1->getBullet());
             player1->setIsBulletInScene(1);
         }
-        bool IsBrick2 = false;
-        bool IsWater2 = false;
-        QList<QGraphicsItem*> colliding_items2 = player2->collidingItems();
-        foreach (QGraphicsItem *item2, colliding_items2) {
-            Brick *brick = dynamic_cast<Brick *>(item2);
-            if (brick) {
-                IsBrick2 = true;
+        if(twoPlayer){
+            bool IsBrick2 = false;
+            bool IsWater2 = false;
+            QList<QGraphicsItem*> colliding_items2 = player2->collidingItems();
+            foreach (QGraphicsItem *item2, colliding_items2) {
+                Brick *brick = dynamic_cast<Brick *>(item2);
+                if (brick) {
+                    IsBrick2 = true;
+                }
+                Water *water = dynamic_cast<Water *>(item2);
+                if (water) {
+                    IsWater2 = true;
+                }
             }
-            Water *water = dynamic_cast<Water *>(item2);
-            if (water) {
-                IsWater2 = true;
+            if(IsBrick2==0 && IsWater2==0){
+                if (event->key() == Qt::Key_A && player2->x()>10) {
+                    player2->setPos(player2->x()-4,player2->y());
+                    player2->Rotate(270);
+                } else if (event->key() == Qt::Key_D && player2->x()<458) {
+                    player2->setPos(player2->x()+4,player2->y());
+                    player2->Rotate(90);
+                } else if (event->key() == Qt::Key_W && player2->y()>10) {
+                    player2->setPos(player2->x(),player2->y()-4);
+                    player2->Rotate(0);
+                } else if (event->key() == Qt::Key_S && player2->y()<298) {
+                    player2->setPos(player2->x(),player2->y()+4);
+                    player2->Rotate(180);
+                }
+            }else{
+                if (player2->getRotation() == 0){
+                    player2->setPos(player2->x(),player2->y()+4);
+                }else if (player2->getRotation() == 90){
+                    player2->setPos(player2->x()-4,player2->y());
+                }else if(player2->getRotation() == 180){
+                    player2->setPos(player2->x(),player2->y()-4);
+                }else if(player2->getRotation() == 270){
+                    player2->setPos(player2->x()+4,player2->y());
+                }
+            }
+            if (event->key() == Qt::Key_E && player2->getIsBulletInScene()==0) {
+                player2->getBullet()->setPos(player2->x()+12,player2->y()+12);
+                player2->getBullet()->Rotate(player2->getRotation());
+                addItem(player2->getBullet());
+                player2->setIsBulletInScene(1);
             }
         }
-        if(IsBrick2==0 && IsWater2==0){
-            if (event->key() == Qt::Key_A && player2->x()>10) {
-                player2->setPos(player2->x()-4,player2->y());
-                player2->Rotate(270);
-            } else if (event->key() == Qt::Key_D && player2->x()<458) {
-                player2->setPos(player2->x()+4,player2->y());
-                player2->Rotate(90);
-            } else if (event->key() == Qt::Key_W && player2->y()>10) {
-                player2->setPos(player2->x(),player2->y()-4);
-                player2->Rotate(0);
-            } else if (event->key() == Qt::Key_S && player2->y()<298) {
-                player2->setPos(player2->x(),player2->y()+4);
-                player2->Rotate(180);
-            }
-        }else{
-            if (player2->getRotation() == 0){
-                player2->setPos(player2->x(),player2->y()+4);
-            }else if (player2->getRotation() == 90){
-                player2->setPos(player2->x()-4,player2->y());
-            }else if(player2->getRotation() == 180){
-                player2->setPos(player2->x(),player2->y()-4);
-            }else if(player2->getRotation() == 270){
-                player2->setPos(player2->x()+4,player2->y());
-            }
-        }
-        if (event->key() == Qt::Key_E && player2->getIsBulletInScene()==0) {
-            player2->getBullet()->setPos(player2->x()+12,player2->y()+12);
-            player2->getBullet()->Rotate(player2->getRotation());
-            addItem(player2->getBullet());
-            player2->setIsBulletInScene(1);
-        }
+
     }
     if(GameOn == 0 && (event->key() == Qt::Key_1)){
         GameOn = 1;
@@ -157,6 +160,7 @@ void Scene::generateLevelOne()
         if (generatedEnemyCount < 20) {
             int enemyGenetate = QRandomGenerator::global()->bounded(0, 3);
             Enemy* enemy = new Enemy;
+            connect(enemy->getBullet(),&EnemyBullet::playerDie,this,&Scene::updateGameState);
             enemy->setPos(enemyGenetate * 200, 10);
             enemy->setZValue(-0.5);
             addItem(enemy);
@@ -380,6 +384,15 @@ void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
                 delete tree;
             }
         }
+        QList<QGraphicsItem*> tank = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
+        for (QGraphicsItem* item : tank) {
+            Tank* tank = dynamic_cast<Tank*>(item);
+            if (tank) {
+                removeItem(tank);
+                delete tank;
+            }
+        }
+
     }
 
     void Scene::updateHealthText()
@@ -387,7 +400,24 @@ void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
         QString healthStr = QString("Health1 : %2").arg(player1->getHealth());
         healthText1->setPlainText(healthStr);
 
-        QString healthStr2 = QString("Health2 : %2").arg(player2->getHealth());
-        healthText2->setPlainText(healthStr2);
+        if(twoPlayer){
+            QString healthStr2 = QString("Health2 : %2").arg(player2->getHealth());
+            healthText2->setPlainText(healthStr2);
+        }
+
+    }
+
+    void Scene::updateGameState()
+    {
+        if(twoPlayer){
+            if(player1->getHealth() + player2->getHealth() == 0){
+                GameOn = 0;
+                clearLevelOne();
+            }
+        }else if(player1->getHealth() == 0){
+            GameOn = 0;
+            clearLevelOne();
+        }
+
     }
 

@@ -5,6 +5,7 @@
 
 class EnemyBullet :public Bullet
 {
+    Q_OBJECT
 public:
     EnemyBullet(Tank *tank, int speed);
 
@@ -12,7 +13,7 @@ public:
 
 
 signals:
-
+    void playerDie(Player* player);
 private:
 };
 

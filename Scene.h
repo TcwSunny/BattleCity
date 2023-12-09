@@ -17,6 +17,7 @@ public:
     void generateLevelTwo();
     void clearLevelOne();
     void updateHealthText();
+    void updateGameState();
 
 private:
     Player *player1;
@@ -28,15 +29,14 @@ private:
 
     QTimer *healthTimer;
     QTimer *enemyTimer;
-
+    QGraphicsPixmapItem *backGround;
+    bool GameOn;
+    bool twoPlayer;
 
     // QGraphicsScene interface
 protected:
     void keyPressEvent(QKeyEvent *event);
-private:
-    QGraphicsPixmapItem *backGround;
-    bool GameOn;
-    bool twoPlayer;
+
 };
 
 #endif // SCENE_H

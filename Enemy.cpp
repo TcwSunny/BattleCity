@@ -55,6 +55,8 @@ Enemy::Enemy()
         break;
     }
 
+
+
     pixmap = pixmap.scaled(QSize(32, 32));
     setPixmap(pixmap);
 
