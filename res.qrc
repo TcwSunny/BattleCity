@@ -20,5 +20,7 @@
         <file>Images/stone.png</file>
         <file>Images/water.png</file>
         <file>Images/EnterScene.png</file>
+        <file>Images/End1Player.jpg</file>
+        <file>Images/End2Player.jpg</file>
     </qresource>
 </RCC>

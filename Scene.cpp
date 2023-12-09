@@ -139,10 +139,10 @@ void Scene::generateLevelOne()
     player1->setZValue(-0.5);
     addItem(player1);
 
-    player2 = new Player(2);
-    player2->setPos(300,298);
-    player2->setZValue(-0.5);
     if(twoPlayer){
+        player2 = new Player(2);
+        player2->setPos(300,298);
+        player2->setZValue(-0.5);
         addItem(player2);
     }
 
@@ -365,6 +365,7 @@ void Scene::generateLevelTwo()
 
 void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
     {
+        enemyTimer->stop();
         // 清除所有Brick
         QList<QGraphicsItem*> brickItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
         for (QGraphicsItem* item : brickItems) {
@@ -402,7 +403,26 @@ void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
                 delete tank;
             }
         }
-
+        QList<QGraphicsItem*> bullet = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
+        for (QGraphicsItem* item : bullet) {
+            Bullet* bullet = dynamic_cast<Bullet*>(item);
+            if (bullet) {
+                removeItem(bullet);
+                delete bullet;
+            }
+        }
+        healthTimer->stop();
+        removeItem(healthText1);
+        delete healthText1;
+        if(twoPlayer){
+            removeItem(healthText2);
+            delete healthText2;
+            backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/End2Player.jpg"));
+        }else{
+            backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/End1Player.jpg"));
+        }
+        backGround->setZValue(-0.75);
+        addItem(backGround);
     }
 
     void Scene::updateHealthText()
