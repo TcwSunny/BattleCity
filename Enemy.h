@@ -19,6 +19,8 @@ public:
     int getHealth() const;
     void decreaseHealth();
 
+    void toggleMovementPause();
+
 public slots:
     void move();
 
@@ -32,6 +34,7 @@ private:
     EnemyBullet *bullet;
     int health;
     int enemyState;
+    bool isMovementPaused;
 };
 
 

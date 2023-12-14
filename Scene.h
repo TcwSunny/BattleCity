@@ -16,6 +16,7 @@ public:
     void generateLevelOne();
     void generateLevelTwo();
     void updateHealthText();
+    void togglePause();
 
 public slots:
     void updateGameState();
@@ -30,6 +31,7 @@ private:
 
     QGraphicsTextItem *healthText1;
     QGraphicsTextItem *healthText2;
+    QGraphicsTextItem *pauseText;
 
     QTimer *healthTimer;
     QTimer *enemyTimer;
@@ -42,6 +44,9 @@ private:
 
     int score;
     int killnum;
+
+    bool isGamePaused ;
+
     // QGraphicsScene interface
 protected:
     void keyPressEvent(QKeyEvent *event);

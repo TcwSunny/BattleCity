@@ -14,6 +14,7 @@ Enemy::Enemy()
 
     timer = new QTimer(this);//跟著Bullet Delete掉
     connect(timer, &QTimer::timeout, this, &Enemy::move);//當發生time out時使用這個物件的move處理
+    isMovementPaused = false;
 
 
     switch(enemyState){
@@ -94,6 +95,10 @@ void Enemy::enemyShootBullet()
 
 void Enemy::move()
 {
+    if (isMovementPaused) {
+        return;  // Do nothing if movement is paused
+    }
+
     if (x() >= 10 && x() <= 458 && y() >= 10 && y() <= 298){
         // Check for collisions with bricks
         QList<QGraphicsItem *> collidingItemsList = collidingItems();
@@ -162,5 +167,15 @@ int Enemy::getHealth() const
 void Enemy::decreaseHealth()
 {
     health--;
+}
+
+void Enemy::toggleMovementPause()
+{
+    isMovementPaused = !isMovementPaused;
+    if(isMovementPaused){
+        timerBullet->stop();
+    }else{
+        timerBullet->start();
+    }
 }
 

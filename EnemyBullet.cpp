@@ -20,8 +20,13 @@ EnemyBullet::EnemyBullet(Tank *tank,int speed):Bullet(tank)
     connect(timer, &QTimer::timeout, this, &EnemyBullet::move);//當發生time out時使用這個物件的move處理
     timer->start(speed); // 移動速度
     Parent = tank;
+    isMovementPaused = false;
 }
 void EnemyBullet::move() {
+    if (isMovementPaused) {
+        return;  // Do nothing if movement is paused
+    }
+
 
     QList<QGraphicsItem *> colliding_items = collidingItems();//取得相撞物件清單
     foreach (QGraphicsItem *item, colliding_items) {//對每個item辨別enemy
@@ -84,4 +89,9 @@ void EnemyBullet::move() {
             Parent->setIsBulletInScene(0);
         }
     }
+}
+
+void EnemyBullet::toggleMovementPause()
+{
+    isMovementPaused = !isMovementPaused;
 }

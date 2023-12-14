@@ -10,12 +10,14 @@ public:
     EnemyBullet(Tank *tank, int speed);
 
     void move();
+void toggleMovementPause();
 
 
 signals:
     void playerDie();
     void castleDie();
 private:
+    bool isMovementPaused;
 };
 
 #endif // ENEMYBULLET_H

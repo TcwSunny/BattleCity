@@ -10,10 +10,12 @@ class PlayerBullet : public Bullet
     Q_OBJECT
 public:
     PlayerBullet(Tank *tank);
-
+void toggleMovementPause();
     void move();
 signals:
     void killOneEnemy();
+private:
+    bool isMovementPaused;
 
 };
 

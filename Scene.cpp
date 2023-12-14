@@ -21,11 +21,15 @@ Scene::Scene(QObject *parent)
     player2Die = 0;
     score = 0;
     killnum = 0;
+    isGamePaused = false;
 
     //generateLevelTwo();
 }
 
 void Scene::keyPressEvent(QKeyEvent *event){
+    if (event->key() == Qt::Key_P) {
+        togglePause();
+    }
     if(GameOn == 1){
         bool IsBrick = false;
         bool IsWater = false;
@@ -40,7 +44,9 @@ void Scene::keyPressEvent(QKeyEvent *event){
                 IsWater = true;
             }
         }
-
+        if(isGamePaused){
+            return; //如果game paused,不能動
+        }
         if(IsBrick==0 && IsWater==0){
             if (event->key() == Qt::Key_Left && player1->x()>10) {
                 player1->setPos(player1->x()-4,player1->y());
@@ -120,6 +126,7 @@ void Scene::keyPressEvent(QKeyEvent *event){
         }
 
     }
+
     if(GameOn == 0 && (event->key() == Qt::Key_1)){
         GameOn = 1;
         twoPlayer = 0;
@@ -190,6 +197,13 @@ void Scene::generateLevelOne()
     healthText2->setDefaultTextColor(textColor2);
     addItem(healthText2);
     updateHealthText();
+
+    pauseText = new QGraphicsTextItem();
+    pauseText->setPos(495,200);
+    pauseText->setDefaultTextColor(textColor);
+    QString pauseStr = QString("Press P to pause\n     or continue");
+    pauseText->setPlainText(pauseStr);
+    addItem(pauseText);
 
     healthTimer= new QTimer();
     connect(healthTimer, &QTimer::timeout, this, &Scene::updateHealthText);
@@ -477,6 +491,45 @@ void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
         if(twoPlayer){
             QString healthStr2 = QString("Health2 : %2").arg(player2->getHealth());
             healthText2->setPlainText(healthStr2);
+        }
+
+    }
+
+    void Scene::togglePause()
+    {
+        isGamePaused = !isGamePaused;
+
+        if (isGamePaused) {
+            // Pause game logic (stop timers, freeze movements, etc.)
+            // For example:
+            enemyTimer->stop();
+            healthTimer->stop();
+        } else {
+            // Resume game logic (start timers, allow movements, etc.)
+            // For example:
+            enemyTimer->start();
+            healthTimer->start();
+        }
+        QList<QGraphicsItem*> enemyItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
+        for (QGraphicsItem* item : enemyItems) {
+            Enemy* enemy = dynamic_cast<Enemy*>(item);
+            if (enemy) {
+                enemy->toggleMovementPause();
+            }
+        }
+        QList<QGraphicsItem *> bulletItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
+        for (QGraphicsItem *item : bulletItems) {
+            EnemyBullet *bullet = dynamic_cast<EnemyBullet *>(item);
+            if (bullet) {
+                bullet->toggleMovementPause();
+            }
+        }
+        QList<QGraphicsItem *> bulletItems2 = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
+        for (QGraphicsItem *item : bulletItems2) {
+            PlayerBullet *bullet = dynamic_cast<PlayerBullet *>(item);
+            if (bullet) {
+                bullet->toggleMovementPause();
+            }
         }
 
     }
