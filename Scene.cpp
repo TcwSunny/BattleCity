@@ -463,6 +463,8 @@ void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
         }else{
             backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/End1Player.jpg"));
         }
+        removeItem(pauseText);
+        delete pauseText;
         backGround->setZValue(-0.75);
         addItem(backGround);
     }
