@@ -8,8 +8,10 @@
 
 class Enemy: public Tank
 {
+    Q_OBJECT
 public:
-    Enemy();
+    explicit Enemy();
+    ~Enemy();
     EnemyBullet *getBullet() const;
     void setBullet(EnemyBullet *newBullet);
     void enemyShootBullet();
@@ -20,12 +22,16 @@ public:
 public slots:
     void move();
 
+signals:
+    void enemyDie(int newscore);
+
 private:
     QTimer *timer;
     QTimer *timerBullet;
     bool isChangingDirection;
     EnemyBullet *bullet;
     int health;
+    int enemyState;
 };
 
 

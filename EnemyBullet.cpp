@@ -59,8 +59,7 @@ void EnemyBullet::move() {
                 int playerHealth = player->getHealth();
                 player->setHealth(playerHealth - 1);
                 if(player->getHealth()==0){
-                    emit playerDie(player);
-                    qDebug() << "Die";
+                    emit playerDie();
                 }
             }else if(dynamic_cast<Castle*>(item)){
                 scene()->removeItem(this);

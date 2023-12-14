@@ -17,6 +17,9 @@ Scene::Scene(QObject *parent)
     backGround->setZValue(-1);
     addItem(backGround);
     GameOn = 0;
+    player1Die = 0;
+    player2Die = 0;
+    score = 0;
 
     //generateLevelTwo();
 }
@@ -152,6 +155,8 @@ void Scene::generateLevelOne()
     Enemy* enemy = new Enemy;
     enemy->setPos(10,10);
     enemy->setZValue(-0.5);
+    connect(enemy->getBullet(),&EnemyBullet::playerDie,this,&Scene::updateGameState);
+    connect(enemy,&Enemy::enemyDie,this,&Scene::addScore);
     addItem(enemy);
     enemyTimer = new QTimer();
     connect(enemyTimer, &QTimer::timeout, this, [=]() {
@@ -160,7 +165,7 @@ void Scene::generateLevelOne()
             int enemyGenetate = QRandomGenerator::global()->bounded(0, 3);
             Enemy* enemy = new Enemy;
             connect(enemy->getBullet(),&EnemyBullet::playerDie,this,&Scene::updateGameState);
-
+            connect(enemy,&Enemy::enemyDie,this,&Scene::addScore);
             enemy->setPos(enemyGenetate * 200, 10);
             enemy->setZValue(-0.5);
             addItem(enemy);
@@ -443,6 +448,12 @@ void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
         addItem(backGround);
     }
 
+    void Scene::addScore(int newScore)
+    {
+        score = score+newScore;
+        qDebug() << score;
+    }
+
     void Scene::updateHealthText()
     {
         QString healthStr = QString("Health1 : %2").arg(player1->getHealth());
@@ -458,7 +469,17 @@ void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
     void Scene::updateGameState()
     {
         if(twoPlayer){
-            if(player1->getHealth() + player2->getHealth() == 0){
+            if(player1->getHealth() == 0){
+                removeItem(player1);
+                player1Die = 1;
+                qDebug() << "1Die";
+            }
+            if(player2->getHealth() == 0){
+                removeItem(player2);
+                player2Die = 1;
+                qDebug() << "2Die";
+            }
+            if(player1Die&&player2Die){
                 GameOn = 0;
                 clearLevelOne();
             }

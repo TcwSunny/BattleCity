@@ -15,9 +15,12 @@ public:
     explicit Scene(QObject *parent = nullptr);
     void generateLevelOne();
     void generateLevelTwo();
-    void clearLevelOne();
     void updateHealthText();
+
+public slots:
     void updateGameState();
+    void clearLevelOne();
+    void addScore(int newScore);
 
 private:
     Player *player1;
@@ -32,6 +35,11 @@ private:
     QGraphicsPixmapItem *backGround;
     bool GameOn;
     bool twoPlayer;
+
+    bool player1Die;
+    bool player2Die;
+
+    int score;
 
     // QGraphicsScene interface
 protected:

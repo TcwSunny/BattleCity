@@ -13,7 +13,7 @@ public:
 
 
 signals:
-    void playerDie(Player* player);
+    void playerDie();
     void castleDie();
 private:
 };

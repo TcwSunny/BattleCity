@@ -10,7 +10,7 @@
 Enemy::Enemy()
 {
     QPixmap pixmap;
-    int enemyState = QRandomGenerator::global()->bounded(1, 5);
+    enemyState = QRandomGenerator::global()->bounded(1, 5);
 
     timer = new QTimer(this);//跟著Bullet Delete掉
     connect(timer, &QTimer::timeout, this, &Enemy::move);//當發生time out時使用這個物件的move處理
@@ -65,6 +65,11 @@ Enemy::Enemy()
 
 
 
+}
+
+Enemy::~Enemy()
+{
+    emit enemyDie(enemyState*100);
 }
 
 EnemyBullet *Enemy::getBullet() const
