@@ -1,5 +1,6 @@
 #include "Bullet.h"
 #include "Player.h"
+#include <QObject>
 
 Player::Player(int num):Health(2)
 {

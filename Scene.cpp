@@ -20,6 +20,7 @@ Scene::Scene(QObject *parent)
     player1Die = 0;
     player2Die = 0;
     score = 0;
+    killnum = 0;
 
     //generateLevelTwo();
 }
@@ -314,7 +315,11 @@ void Scene::generateLevelOne()
 
 
     connect(enemy->getBullet(),&EnemyBullet::castleDie,this,&Scene::clearLevelOne);
+    connect(player1->getBullet(),&PlayerBullet::killOneEnemy,this,&Scene::killingCount);
 
+    if(twoPlayer){
+    connect(player2->getBullet(),&PlayerBullet::killOneEnemy,this,&Scene::killingCount);
+    }
     //QTimer::singleShot(5000, this, &Scene::clearLevelOne);
 }
 
@@ -452,6 +457,16 @@ void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
     {
         score = score+newScore;
         qDebug() << score;
+    }
+
+    void Scene::killingCount()
+    {
+        killnum++;
+        qDebug()<<killnum;
+        if(killnum==3){
+            GameOn = 0;
+            clearLevelOne();
+        }
     }
 
     void Scene::updateHealthText()

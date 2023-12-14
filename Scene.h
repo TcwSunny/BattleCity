@@ -21,6 +21,7 @@ public slots:
     void updateGameState();
     void clearLevelOne();
     void addScore(int newScore);
+    void killingCount();
 
 private:
     Player *player1;
@@ -40,7 +41,7 @@ private:
     bool player2Die;
 
     int score;
-
+    int killnum;
     // QGraphicsScene interface
 protected:
     void keyPressEvent(QKeyEvent *event);
