@@ -32,6 +32,7 @@ private:
     QGraphicsTextItem *healthText1;
     QGraphicsTextItem *healthText2;
     QGraphicsTextItem *pauseText;
+    QGraphicsTextItem *continueText;
 
     QTimer *healthTimer;
     QTimer *enemyTimer;

@@ -9,6 +9,7 @@
 #include <QRandomGenerator>
 #include <QDebug>
 #include <QTimer>
+#include <QFont>
 
 Scene::Scene(QObject *parent)
     :QGraphicsScene{parent}
@@ -201,7 +202,7 @@ void Scene::generateLevelOne()
     pauseText = new QGraphicsTextItem();
     pauseText->setPos(495,200);
     pauseText->setDefaultTextColor(textColor);
-    QString pauseStr = QString("Press P to pause\n     or continue");
+    QString pauseStr = QString("Press P to pause");
     pauseText->setPlainText(pauseStr);
     addItem(pauseText);
 
@@ -502,15 +503,29 @@ void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
         isGamePaused = !isGamePaused;
 
         if (isGamePaused) {
+            continueText = new QGraphicsTextItem("Press P to \n continue");
+            continueText->setPos(70,70);
+            continueText->setZValue(1.5);
+            QFont font;
+            font.setPointSize(60);  // Set the font size to 16
+            font.setBold(true);
+            continueText->setFont(font);
+            QColor textColor(Qt::white);
+            continueText->setDefaultTextColor(textColor);
+            addItem(continueText);
+
             // Pause game logic (stop timers, freeze movements, etc.)
             // For example:
             enemyTimer->stop();
             healthTimer->stop();
+
         } else {
             // Resume game logic (start timers, allow movements, etc.)
             // For example:
             enemyTimer->start();
             healthTimer->start();
+            removeItem(continueText);
+            delete continueText;
         }
         QList<QGraphicsItem*> enemyItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
         for (QGraphicsItem* item : enemyItems) {
