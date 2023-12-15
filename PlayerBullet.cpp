@@ -17,6 +17,7 @@ PlayerBullet::PlayerBullet(Tank *tank) : Bullet(tank) {
     timer->start(50);
 
     Parent = tank;
+    isMovementPaused = false;
 }
 
 void PlayerBullet::toggleMovementPause()

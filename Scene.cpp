@@ -546,6 +546,7 @@ void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
             PlayerBullet *bullet = dynamic_cast<PlayerBullet *>(item);
             if (bullet) {
                 bullet->toggleMovementPause();
+
             }
         }
 
