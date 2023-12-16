@@ -206,6 +206,12 @@ void Scene::generateLevelOne()
     pauseText->setPlainText(pauseStr);
     addItem(pauseText);
 
+    scoreText = new QGraphicsTextItem();
+    scoreText->setPos(510,150); // Adjust the position as needed
+    scoreText->setDefaultTextColor(textColor);
+    QString scoreStr = QString("Score : %2");
+    addItem(scoreText);
+
     healthTimer= new QTimer();
     connect(healthTimer, &QTimer::timeout, this, &Scene::updateHealthText);
     healthTimer->start(500);
@@ -406,6 +412,7 @@ void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
             Brick* brick = dynamic_cast<Brick*>(item);
             if (brick) {
                 removeItem(brick);
+
                 delete brick;
             }
         }
@@ -468,11 +475,24 @@ void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
         delete pauseText;
         backGround->setZValue(-0.75);
         addItem(backGround);
+
+        QFont font;
+        font.setPointSize(50);  // Set the font size to 16
+        font.setBold(true);
+        scoreText->setFont(font);
+        scoreText->setPos(134,110);
+
     }
 
     void Scene::addScore(int newScore)
     {
-        score = score+newScore;
+        if(GameOn==1){
+
+            score = score+newScore;
+
+            QString scoreStr = QString("Score : %2").arg(score);
+            scoreText->setPlainText(scoreStr);
+        }
         qDebug() << score;
     }
 
