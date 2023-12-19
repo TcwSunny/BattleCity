@@ -12,6 +12,7 @@ class Scene : public QGraphicsScene
 {
     Q_OBJECT
 public:
+    enum gameOn{start, levelOneWin, levelTwoWin, end};
     explicit Scene(QObject *parent = nullptr);
     void generateLevelOne();
     void generateLevelTwo();
@@ -28,6 +29,7 @@ private:
     Player *player1;
     Player *player2;
     Bullet *bullet1;
+    gameOn GameOn;
 
     QGraphicsTextItem *healthText1;
     QGraphicsTextItem *healthText2;
@@ -38,7 +40,7 @@ private:
     QTimer *healthTimer;
     QTimer *enemyTimer;
     QGraphicsPixmapItem *backGround;
-    bool GameOn;
+
     bool twoPlayer;
 
     bool player1Die;

@@ -17,7 +17,7 @@ Scene::Scene(QObject *parent)
     backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/EnterScene.png"));
     backGround->setZValue(-1);
     addItem(backGround);
-    GameOn = 0;
+    GameOn = end;
     player1Die = 0;
     player2Die = 0;
     score = 0;
@@ -31,7 +31,7 @@ void Scene::keyPressEvent(QKeyEvent *event){
     if (event->key() == Qt::Key_P) {
         togglePause();
     }
-    if(GameOn == 1){
+    if(GameOn == start){
         bool IsBrick = false;
         bool IsWater = false;
         QList<QGraphicsItem*> colliding_items = player1->collidingItems();
@@ -125,21 +125,21 @@ void Scene::keyPressEvent(QKeyEvent *event){
                 player2->setIsBulletInScene(1);
             }
         }
-
     }
 
-    if(GameOn == 0 && (event->key() == Qt::Key_1)){
-        GameOn = 1;
+    if(GameOn == end && (event->key() == Qt::Key_1)){
+        GameOn = start;
         twoPlayer = 0;
         generateLevelOne();
         qDebug() << "Start"<<twoPlayer;
     }
-    if(GameOn == 0 && (event->key() == Qt::Key_2)){
-        GameOn = 1;
+    if(GameOn == end && (event->key() == Qt::Key_2)){
+        GameOn = start;
         twoPlayer = 1;
         generateLevelOne();
         qDebug() << "Start"<<twoPlayer;
     }
+
 }
 void Scene::generateLevelOne()
 {
@@ -403,90 +403,97 @@ void Scene::generateLevelTwo()
 }
 
 
-void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
-    {
-        enemyTimer->stop();
-        // 清除所有Brick
-        QList<QGraphicsItem*> brickItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
-        for (QGraphicsItem* item : brickItems) {
-            Brick* brick = dynamic_cast<Brick*>(item);
-            if (brick) {
-                removeItem(brick);
+void Scene::clearLevelOne()
+{
+    qDebug() << "123";
+    enemyTimer->stop();
 
-                delete brick;
-            }
+    // Remove and delete bricks
+    QList<QGraphicsItem*> brickItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
+    for (QGraphicsItem* item : brickItems) {
+        Brick* brick = dynamic_cast<Brick*>(item);
+        if (brick) {
+            removeItem(brick);
+            delete brick;
         }
-
-        // 清除所有Water
-        QList<QGraphicsItem*> waterItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
-        for (QGraphicsItem* item : waterItems) {
-            Water* water = dynamic_cast<Water*>(item);
-            if (water) {
-                removeItem(water);
-                delete water;
-            }
-        }
-
-        // 清除所有Tree
-        QList<QGraphicsItem*> treeItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
-        for (QGraphicsItem* item : treeItems) {
-            Trees* tree = dynamic_cast<Trees*>(item);
-            if (tree) {
-                removeItem(tree);
-                delete tree;
-            }
-        }
-        // 清除所有bitch
-        QList<QGraphicsItem*> bitch = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
-        for (QGraphicsItem* item : bitch) {
-            Castle* bitch = dynamic_cast<Castle*>(item);
-            if (bitch) {
-                removeItem(bitch);
-                delete bitch;
-            }
-        }
-        QList<QGraphicsItem*> tank = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
-        for (QGraphicsItem* item : tank) {
-            Tank* tank = dynamic_cast<Tank*>(item);
-            if (tank) {
-                removeItem(tank);
-                delete tank;
-            }
-        }
-        QList<QGraphicsItem*> bullet = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
-        for (QGraphicsItem* item : bullet) {
-            Bullet* bullet = dynamic_cast<Bullet*>(item);
-            if (bullet) {
-                removeItem(bullet);
-                delete bullet;
-            }
-        }
-        healthTimer->stop();
-        removeItem(healthText1);
-        delete healthText1;
-        if(twoPlayer){
-            removeItem(healthText2);
-            delete healthText2;
-            backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/End2Player.jpg"));
-        }else{
-            backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/End1Player.jpg"));
-        }
-        removeItem(pauseText);
-        delete pauseText;
-        backGround->setZValue(-0.75);
-        addItem(backGround);
-
-        QFont font;
-        font.setPointSize(50);  // Set the font size to 16
-        font.setBold(true);
-        scoreText->setFont(font);
-        scoreText->setPos(134,110);
-
     }
+
+    // Remove and delete water
+    QList<QGraphicsItem*> waterItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
+    for (QGraphicsItem* item : waterItems) {
+        Water* water = dynamic_cast<Water*>(item);
+        if (water) {
+            removeItem(water);
+            delete water;
+        }
+    }
+
+    // Remove and delete trees
+    QList<QGraphicsItem*> treeItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
+    for (QGraphicsItem* item : treeItems) {
+        Trees* tree = dynamic_cast<Trees*>(item);
+        if (tree) {
+            removeItem(tree);
+            delete tree;
+        }
+    }
+
+    // Remove and delete castle
+    QList<QGraphicsItem*> castleItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
+    for (QGraphicsItem* item : castleItems) {
+        Castle* castle = dynamic_cast<Castle*>(item);
+        if (castle) {
+            removeItem(castle);
+            delete castle;
+        }
+    }
+
+    // Remove and delete tanks
+    QList<QGraphicsItem*> tankItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
+    for (QGraphicsItem* item : tankItems) {
+        Tank* tank = dynamic_cast<Tank*>(item);
+        if (tank) {
+            removeItem(tank);
+            // delete tank;
+        }
+    }
+
+    // Remove and delete bullets
+    QList<QGraphicsItem*> bulletItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
+    for (QGraphicsItem* item : bulletItems) {
+        Bullet* bullet = dynamic_cast<Bullet*>(item);
+        if (bullet) {
+            removeItem(bullet);
+            delete bullet;
+        }
+    }
+
+    healthTimer->stop();
+    removeItem(healthText1);
+    delete healthText1;
+
+    if (twoPlayer) {
+        removeItem(healthText2);
+        delete healthText2;
+    }
+
+    removeItem(pauseText);
+    delete pauseText;
+
+    backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/End1Player.jpg"));
+    backGround->setZValue(-0.75);
+    addItem(backGround);
+
+    QFont font;
+    font.setPointSize(50);
+    font.setBold(true);
+    scoreText->setFont(font);
+    scoreText->setPos(134, 110);
+}
 
     void Scene::addScore(int newScore)
     {
-        if(GameOn==1){
+        if(GameOn==start){
 
             score = score+newScore;
 
@@ -500,9 +507,9 @@ void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
     {
         killnum++;
         qDebug()<<killnum;
-        if(killnum==3){
-            GameOn = 0;
-            clearLevelOne();
+        if(killnum==2){
+            GameOn = levelOneWin;
+            updateGameState();
         }
     }
 
@@ -572,27 +579,23 @@ void Scene::clearLevelOne() //到時候換關的時候可以用 !!!!
 
     }
 
-    void Scene::updateGameState()
-    {
-        if(twoPlayer){
-            if(player1->getHealth() == 0){
-                removeItem(player1);
-                player1Die = 1;
-                qDebug() << "1Die";
-            }
-            if(player2->getHealth() == 0){
-                removeItem(player2);
-                player2Die = 1;
-                qDebug() << "2Die";
-            }
-            if(player1Die&&player2Die){
-                GameOn = 0;
-                clearLevelOne();
-            }
-        }else if(player1->getHealth() == 0){
-            GameOn = 0;
+void Scene::updateGameState()
+{
+    if (twoPlayer) {
+        if (player1 && player1->getHealth() == 0) {
+            removeItem(player1);
+            player1Die = 1;
+            qDebug() << "Player 1 Die";
+        }
+        if (player2 && player2->getHealth() == 0) {
+            removeItem(player2);
+            player2Die = 1;
+            qDebug() << "Player 2 Die";
+        }
+        if (player1Die && player2Die) {
             clearLevelOne();
         }
-
+    } else if (GameOn==levelOneWin) {
+        clearLevelOne();
     }
-
+}
