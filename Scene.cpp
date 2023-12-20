@@ -194,10 +194,11 @@ void Scene::generateLevelOne()
     connect(enemy,&Enemy::enemyDie,this,&Scene::killingCount);
     connect(enemy,&Enemy::armorTankDie,this,&Scene::generatePowerUp);
     addItem(enemy);
+
     enemyTimer = new QTimer();
     connect(enemyTimer, &QTimer::timeout, this, [=]() {
         static int generatedEnemyCount = 0;
-        if (generatedEnemyCount < 20) {
+        if (generatedEnemyCount < 19) {
             int enemyGenetate = QRandomGenerator::global()->bounded(0, 3);
             Enemy* enemy = new Enemy;
             connect(enemy->getBullet(),&EnemyBullet::playerDie,this,&Scene::updateGameState);
@@ -550,7 +551,7 @@ void Scene::clearLevelOne()
     {
         qDebug()<<"power tank die";
         int posNumber ;
-        posNumber = QRandomGenerator::global()->bounded(0,2);
+        posNumber = QRandomGenerator::global()->bounded(0,3);
         PowerUp* powerUp = new PowerUp;
         powerUp->setPos(10+224*posNumber,200);
         if(powerUp){
