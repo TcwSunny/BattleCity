@@ -501,7 +501,14 @@ void Scene::clearLevelOne()
             delete bullet;
         }
     }
-
+    QList<QGraphicsItem*> powerUpItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
+    for (QGraphicsItem* item : powerUpItems) {
+        PowerUp* powerUp = dynamic_cast<PowerUp*>(item);
+        if (powerUp) {
+            removeItem(powerUp);
+             delete powerUp;
+        }
+    }
     healthTimer->stop();
     removeItem(healthText1);
     delete healthText1;
@@ -525,7 +532,7 @@ void Scene::clearLevelOne()
     scoreText->setPos(134, 110);
 }
 
-    void Scene::addScore(int newScore)
+void Scene::addScore(int newScore)
     {
         if(GameOn==start){
 
@@ -537,7 +544,7 @@ void Scene::clearLevelOne()
         qDebug() << score;
     }
 
-    void Scene::killingCount()
+void Scene::killingCount()
     {
         killnum++;
         qDebug()<<killnum;
@@ -547,19 +554,19 @@ void Scene::clearLevelOne()
         }
     }
 
-    void Scene::generatePowerUp()
+void Scene::generatePowerUp()
     {
         qDebug()<<"power tank die";
         int posNumber ;
-        posNumber = QRandomGenerator::global()->bounded(0,3);
+        posNumber = QRandomGenerator::global()->bounded(0,5);
         PowerUp* powerUp = new PowerUp;
-        powerUp->setPos(10+224*posNumber,200);
+        powerUp->setPos(10+96*posNumber,200);
         if(powerUp){
 
         addItem(powerUp);}
     }
 
-    void Scene::useGrenade()
+void Scene::useGrenade()
     {
         QList<QGraphicsItem*> enemyItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
         for (QGraphicsItem* item : enemyItems) {
@@ -571,7 +578,7 @@ void Scene::clearLevelOne()
         }
     }
 
-    void Scene::updateHealthText()
+void Scene::updateHealthText()
     {
         QString healthStr = QString("Health1 : %2").arg(player1->getHealth());
         healthText1->setPlainText(healthStr);
@@ -583,7 +590,7 @@ void Scene::clearLevelOne()
 
     }
 
-    void Scene::togglePause()
+void Scene::togglePause()
     {
         isGamePaused = !isGamePaused;
 
