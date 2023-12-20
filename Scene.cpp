@@ -1,11 +1,8 @@
-#include "Enemy.h"
-#include "Brick.h"
 #include "Scene.h"
+#include "Brick.h"
 #include "Water.h"
-#include "PowerUp.h"
 #include "Trees.h"
 #include "Castle.h"
-#include <QGraphicsPixmapItem>
 #include <QKeyEvent>
 #include <QRandomGenerator>
 #include <QDebug>
@@ -18,106 +15,77 @@ Scene::Scene(QObject *parent)
     backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/EnterScene.png"));
     backGround->setZValue(-1);
     addItem(backGround);
-    GameOn = end;
-    player1Die = 0;
-    player2Die = 0;
-    score = 0;
-    killnum = 0;
-    isGamePaused = false;
 
-    //generateLevelTwo();
-
+    gameState = Start;
 }
-
 void Scene::keyPressEvent(QKeyEvent *event){
-    if (event->key() == Qt::Key_P) {
-        togglePause();
+    if(gameState == Start){
+        if(event->key() == Qt::Key_1){
+            player1State = Alive;
+            player2State = None;
+            updateGameState(LevelOne);
+        }
+        if(event->key() == Qt::Key_2){
+            player1State = Alive;
+            player2State = Alive;
+            updateGameState(LevelOne);
+        }
+
     }
-    if(GameOn == start){
-        bool IsBrick = false;
-        bool IsWater = false;
-        QList<QGraphicsItem*> colliding_items = player1->collidingItems();
-        foreach (QGraphicsItem *item, colliding_items) {
-            Brick *brick = dynamic_cast<Brick *>(item);
-            if (brick) {
-                IsBrick = true;
-            }
-            Water *water = dynamic_cast<Water *>(item);
-            if (water) {
-                IsWater = true;
-            }
-            PowerUp *powerUp = dynamic_cast<PowerUp*>(item);
-            if(powerUp){
-                if(powerUp->getPowerUpNumber()==2){
-                    player1->setHealth(player1->getHealth()+1);
-                }
-                else if(powerUp->getPowerUpNumber()==1){
-                    useGrenade();
-                }
-                removeItem(powerUp);
-                delete powerUp;
-            }
-        }
-        if(isGamePaused){
-            return; //如果game paused,不能動
-        }
-        if(IsBrick==0 && IsWater==0){
-            if (event->key() == Qt::Key_Left && player1->x()>10) {
-                player1->setPos(player1->x()-4,player1->y());
-                player1->Rotate(270);
-            } else if (event->key() == Qt::Key_Right && player1->x()<458) {
-                player1->setPos(player1->x()+4,player1->y());
-                player1->Rotate(90);
-            } else if (event->key() == Qt::Key_Up && player1->y()>10) {
-                player1->setPos(player1->x(),player1->y()-4);
-                player1->Rotate(0);
-            } else if (event->key() == Qt::Key_Down && player1->y()<298) {
-                player1->setPos(player1->x(),player1->y()+4);
-                player1->Rotate(180);
-            }
-        }else{
-            if (player1->getRotation() == 0){
-                player1->setPos(player1->x(),player1->y()+4);
-            }else if (player1->getRotation() == 90){
-                player1->setPos(player1->x()-4,player1->y());
-            }else if(player1->getRotation() == 180){
-                player1->setPos(player1->x(),player1->y()-4);
-            }else if(player1->getRotation() == 270){
-                player1->setPos(player1->x()+4,player1->y());
-            }
-        }
-        if (event->key() == Qt::Key_Space && player1->getIsBulletInScene()==0) {
-            player1->getBullet()->setPos(player1->x()+12,player1->y()+12);
-            player1->getBullet()->Rotate(player1->getRotation());
-            addItem(player1->getBullet());
-            player1->setIsBulletInScene(1);
-        }
-        if(twoPlayer){
-            bool IsBrick2 = false;
-            bool IsWater2 = false;
-            QList<QGraphicsItem*> colliding_items2 = player2->collidingItems();
-            foreach (QGraphicsItem *item2, colliding_items2) {
-                Brick *brick = dynamic_cast<Brick *>(item2);
+    if(gameState == LevelOne || gameState == LevelTwo){
+        if(player1State == Alive){
+            bool Stop = false;
+            QList<QGraphicsItem*> colliding_items = player1->collidingItems();
+            foreach (QGraphicsItem *item, colliding_items) {
+                Brick *brick = dynamic_cast<Brick *>(item);
                 if (brick) {
-                    IsBrick2 = true;
+                    Stop = true;
                 }
-                Water *water = dynamic_cast<Water *>(item2);
+                Water *water = dynamic_cast<Water *>(item);
                 if (water) {
-                    IsWater2 = true;
-                }
-                PowerUp *powerUp = dynamic_cast<PowerUp*>(item2);
-                if(powerUp){
-                    if(powerUp->getPowerUpNumber()==2){
-                        player2->setHealth(player2->getHealth()+1);
-                    }
-                    else if(powerUp->getPowerUpNumber()==1){
-                        useGrenade();
-                    }
-                    removeItem(powerUp);
-                    delete powerUp;
+                    Stop = true;
                 }
             }
-            if(IsBrick2==0 && IsWater2==0){
+            if (!Stop){
+                if (event->key() == Qt::Key_Left && player1->x()>10) {
+                    player1->setPos(player1->x()-4,player1->y());
+                    player1->Rotate(270);
+                } else if (event->key() == Qt::Key_Right && player1->x()<458) {
+                    player1->setPos(player1->x()+4,player1->y());
+                    player1->Rotate(90);
+                } else if (event->key() == Qt::Key_Up && player1->y()>10) {
+                    player1->setPos(player1->x(),player1->y()-4);
+                    player1->Rotate(0);
+                } else if (event->key() == Qt::Key_Down && player1->y()<298) {
+                    player1->setPos(player1->x(),player1->y()+4);
+                    player1->Rotate(180);
+                }
+            }else{
+                if (player1->getRotation() == 0){
+                    player1->setPos(player1->x(),player1->y()+4);
+                }else if (player1->getRotation() == 90){
+                    player1->setPos(player1->x()-4,player1->y());
+                }else if(player1->getRotation() == 180){
+                    player1->setPos(player1->x(),player1->y()-4);
+                }else if(player1->getRotation() == 270){
+                    player1->setPos(player1->x()+4,player1->y());
+                }
+            }
+        }
+        if(player2State == Alive){
+            bool Stop2 = false;
+            QList<QGraphicsItem*> colliding_items = player2->collidingItems();
+            foreach (QGraphicsItem *item, colliding_items) {
+                Brick *brick = dynamic_cast<Brick *>(item);
+                if (brick) {
+                    Stop2 = true;
+                }
+                Water *water = dynamic_cast<Water *>(item);
+                if (water) {
+                    Stop2 = true;
+                }
+            }
+            if (!Stop2){
                 if (event->key() == Qt::Key_A && player2->x()>10) {
                     player2->setPos(player2->x()-4,player2->y());
                     player2->Rotate(270);
@@ -142,126 +110,71 @@ void Scene::keyPressEvent(QKeyEvent *event){
                     player2->setPos(player2->x()+4,player2->y());
                 }
             }
-            if (event->key() == Qt::Key_E && player2->getIsBulletInScene()==0) {
-                player2->getBullet()->setPos(player2->x()+12,player2->y()+12);
-                player2->getBullet()->Rotate(player2->getRotation());
-                addItem(player2->getBullet());
-                player2->setIsBulletInScene(1);
-            }
+        }
+    }
+    if(gameState == LevelOne){
+        if (event->key() == Qt::Key_N) {
+            updateGameState(LevelTwo);
         }
     }
 
-    if(GameOn == end && (event->key() == Qt::Key_1)){
-        GameOn = start;
-        twoPlayer = 0;
-        generateLevelOne();
-        qDebug() << "Start"<<twoPlayer;
-    }
-    if(GameOn == end && (event->key() == Qt::Key_2)){
-        GameOn = start;
-        twoPlayer = 1;
-        generateLevelOne();
-        qDebug() << "Start"<<twoPlayer;
-    }
-
 }
-void Scene::generateLevelOne()
-{
 
+void Scene::updateGameState(GameState newState)
+{
+    if(gameState == Start && newState == LevelOne){
+        gameState = LevelOne;
+        generateLevel();
+    }if(gameState == LevelOne && newState == LevelTwo){
+        gameState = LevelTwo;
+        clearLevel();
+        generateLevel();
+
+    }
+}
+
+void Scene::generateLevel(){
     backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/backGround.jpg"));
     backGround->setZValue(-0.75);
     addItem(backGround);
+    if(gameState == LevelOne){
+        LevelOneMap();
+    }else if(gameState == LevelTwo){
+        LevelTwoMap();
+    }
 
-    player1 = new Player(1);
-    player1->setPos(10,298);
-    player1->setZValue(-0.5);
-    addItem(player1);
 
-    if(twoPlayer){
+    if(player1State == Alive){
+        player1 = new Player(1);
+        player1->setPos(10,298);
+        player1->setZValue(-0.5);
+        addItem(player1);
+    }
+    if(player2State == Alive){
         player2 = new Player(2);
         player2->setPos(300,298);
         player2->setZValue(-0.5);
         addItem(player2);
     }
 
-
-
-    Enemy* enemy = new Enemy;
-    enemy->setPos(10,10);
-    enemy->setZValue(-0.5);
-    connect(enemy->getBullet(),&EnemyBullet::playerDie,this,&Scene::updateGameState);
-    connect(enemy,&Enemy::enemyDie,this,&Scene::addScore);
-    connect(enemy,&Enemy::enemyDie,this,&Scene::killingCount);
-    connect(enemy,&Enemy::armorTankDie,this,&Scene::generatePowerUp);
-    addItem(enemy);
-    enemyTimer = new QTimer();
-    connect(enemyTimer, &QTimer::timeout, this, [=]() {
-        static int generatedEnemyCount = 0;
-        if (generatedEnemyCount < 20) {
-            int enemyGenetate = QRandomGenerator::global()->bounded(0, 3);
-            Enemy* enemy = new Enemy;
-            connect(enemy->getBullet(),&EnemyBullet::playerDie,this,&Scene::updateGameState);
-            connect(enemy,&Enemy::enemyDie,this,&Scene::addScore);
-            connect(enemy,&Enemy::enemyDie,this,&Scene::killingCount);
-            connect(enemy,&Enemy::armorTankDie,this,&Scene::generatePowerUp);
-            enemy->setPos(enemyGenetate * 200, 10);
-            enemy->setZValue(-0.5);
-            addItem(enemy);
-            generatedEnemyCount++;
-        } else {
-            enemyTimer->stop();  // 生成 20 台敵人坦克後停止計時器
-        }
-    });
-    enemyTimer->start(4000);
-
-
-
-    healthText1 = new QGraphicsTextItem();
-    healthText1->setPos(510,288); // Adjust the position as needed
-    QColor textColor(Qt::white); // Example: White text color
-    healthText1->setDefaultTextColor(textColor);
-    addItem(healthText1);
-    healthText2 = new QGraphicsTextItem();
-    healthText2->setPos(510,300); // Adjust the position as needed
-    QColor textColor2(Qt::white); // Example: White text color
-    healthText2->setDefaultTextColor(textColor2);
-    addItem(healthText2);
-    updateHealthText();
-
-    pauseText = new QGraphicsTextItem();
-    pauseText->setPos(495,200);
-    pauseText->setDefaultTextColor(textColor);
-    QString pauseStr = QString("Press P to pause");
-    pauseText->setPlainText(pauseStr);
-    addItem(pauseText);
-
-    scoreText = new QGraphicsTextItem();
-    scoreText->setPos(510,150); // Adjust the position as needed
-    scoreText->setDefaultTextColor(textColor);
-    QString scoreStr = QString("Score : %2");
-    addItem(scoreText);
-
-    healthTimer= new QTimer();
-    connect(healthTimer, &QTimer::timeout, this, &Scene::updateHealthText);
-    healthTimer->start(500);
-
-
+}
+void Scene::LevelOneMap(){
     for(int i= 0;i<5;i++){ //把堡壘的牆壁改厚一點 打五次才會消失
-    Brick* brick =new Brick;
-    brick->setPos(202,266);
-    addItem(brick);
-    Brick* brick3 =new Brick;
-    brick3->setPos(202,298);
-    addItem(brick3);
-    Brick* brick2 =new Brick;
-    brick2->setPos(234,266);
-    addItem(brick2);
-    Brick* brick4 =new Brick;
-    brick4->setPos(266,266);
-    addItem(brick4);
-    Brick* brick5 =new Brick;
-    brick5->setPos(266,298);
-    addItem(brick5);}
+        Brick* brick =new Brick;
+        brick->setPos(202,266);
+        addItem(brick);
+        Brick* brick3 =new Brick;
+        brick3->setPos(202,298);
+        addItem(brick3);
+        Brick* brick2 =new Brick;
+        brick2->setPos(234,266);
+        addItem(brick2);
+        Brick* brick4 =new Brick;
+        brick4->setPos(266,266);
+        addItem(brick4);
+        Brick* brick5 =new Brick;
+        brick5->setPos(266,298);
+        addItem(brick5);}
 
     Brick* brick6 =new Brick;
     brick6->setPos(74,106);
@@ -364,20 +277,18 @@ void Scene::generateLevelOne()
     Castle* castle = new Castle;
     castle->setPos(234,298);
     addItem(castle);
-
-
-    connect(enemy->getBullet(),&EnemyBullet::castleDie,this,&Scene::clearLevelOne);
-    //connect(player1->getBullet(),&PlayerBullet::killOneEnemy,this,&Scene::killingCount);
-
-    if(twoPlayer){
-    //connect(player2->getBullet(),&PlayerBullet::killOneEnemy,this,&Scene::killingCount);
-    }
-    //QTimer::singleShot(5000, this, &Scene::clearLevelOne);
-
-
 }
 
-void Scene::generateLevelTwo()
+void Scene::clearLevel()
+{
+    QList<QGraphicsItem*> itemsList = items();
+    for (QGraphicsItem* item : itemsList) {
+        removeItem(item);
+        delete item;
+    }
+}
+
+void Scene::LevelTwoMap()
 {
     Brick* brick =new Brick;
     brick->setPos(10,266);
@@ -433,228 +344,5 @@ void Scene::generateLevelTwo()
         water2->setPos(106+i*32,170);
         addItem(water2);
     }
-}
 
-
-void Scene::clearLevelOne()
-{
-    qDebug() << "123";
-    enemyTimer->stop();
-
-    // Remove and delete bricks
-    QList<QGraphicsItem*> brickItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
-    for (QGraphicsItem* item : brickItems) {
-        Brick* brick = dynamic_cast<Brick*>(item);
-        if (brick) {
-            removeItem(brick);
-            delete brick;
-        }
-    }
-
-    // Remove and delete water
-    QList<QGraphicsItem*> waterItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
-    for (QGraphicsItem* item : waterItems) {
-        Water* water = dynamic_cast<Water*>(item);
-        if (water) {
-            removeItem(water);
-            delete water;
-        }
-    }
-
-    // Remove and delete trees
-    QList<QGraphicsItem*> treeItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
-    for (QGraphicsItem* item : treeItems) {
-        Trees* tree = dynamic_cast<Trees*>(item);
-        if (tree) {
-            removeItem(tree);
-            delete tree;
-        }
-    }
-
-    // Remove and delete castle
-    QList<QGraphicsItem*> castleItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
-    for (QGraphicsItem* item : castleItems) {
-        Castle* castle = dynamic_cast<Castle*>(item);
-        if (castle) {
-            removeItem(castle);
-            delete castle;
-        }
-    }
-
-    // Remove and delete tanks
-    QList<QGraphicsItem*> tankItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
-    for (QGraphicsItem* item : tankItems) {
-        Tank* tank = dynamic_cast<Tank*>(item);
-        if (tank) {
-            removeItem(tank);
-            // delete tank;
-        }
-    }
-
-    // Remove and delete bullets
-    QList<QGraphicsItem*> bulletItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
-    for (QGraphicsItem* item : bulletItems) {
-        Bullet* bullet = dynamic_cast<Bullet*>(item);
-        if (bullet) {
-            removeItem(bullet);
-            delete bullet;
-        }
-    }
-
-    healthTimer->stop();
-    removeItem(healthText1);
-    delete healthText1;
-
-    if (twoPlayer) {
-        removeItem(healthText2);
-        delete healthText2;
-    }
-
-    removeItem(pauseText);
-    delete pauseText;
-
-    backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/End1Player.jpg"));
-    backGround->setZValue(-0.75);
-    addItem(backGround);
-
-    QFont font;
-    font.setPointSize(50);
-    font.setBold(true);
-    scoreText->setFont(font);
-    scoreText->setPos(134, 110);
-}
-
-    void Scene::addScore(int newScore)
-    {
-        if(GameOn==start){
-
-            score = score+newScore;
-
-            QString scoreStr = QString("Score : %2").arg(score);
-            scoreText->setPlainText(scoreStr);
-        }
-        qDebug() << score;
-    }
-
-    void Scene::killingCount()
-    {
-        killnum++;
-        qDebug()<<killnum;
-        if(killnum==20){
-            GameOn = levelOneWin;
-            updateGameState();
-        }
-    }
-
-    void Scene::generatePowerUp()
-    {
-        qDebug()<<"power tank die";
-        int posNumber ;
-        posNumber = QRandomGenerator::global()->bounded(0,2);
-        PowerUp* powerUp = new PowerUp;
-        powerUp->setPos(10+224*posNumber,200);
-        if(powerUp){
-
-        addItem(powerUp);}
-    }
-
-    void Scene::useGrenade()
-    {
-        QList<QGraphicsItem*> enemyItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
-        for (QGraphicsItem* item : enemyItems) {
-            Enemy* enemy = dynamic_cast<Enemy*>(item);
-            if (enemy) {
-            removeItem(enemy);
-            delete enemy;
-            }
-        }
-    }
-
-    void Scene::updateHealthText()
-    {
-        QString healthStr = QString("Health1 : %2").arg(player1->getHealth());
-        healthText1->setPlainText(healthStr);
-
-        if(twoPlayer){
-            QString healthStr2 = QString("Health2 : %2").arg(player2->getHealth());
-            healthText2->setPlainText(healthStr2);
-        }
-
-    }
-
-    void Scene::togglePause()
-    {
-        isGamePaused = !isGamePaused;
-
-        if (isGamePaused) {
-            continueText = new QGraphicsTextItem("Press P to \n continue");
-            continueText->setPos(70,70);
-            continueText->setZValue(1.5);
-            QFont font;
-            font.setPointSize(60);  // Set the font size to 16
-            font.setBold(true);
-            continueText->setFont(font);
-            QColor textColor(Qt::white);
-            continueText->setDefaultTextColor(textColor);
-            addItem(continueText);
-
-            // Pause game logic (stop timers, freeze movements, etc.)
-            // For example:
-            enemyTimer->stop();
-            healthTimer->stop();
-
-        } else {
-            // Resume game logic (start timers, allow movements, etc.)
-            // For example:
-            enemyTimer->start();
-            healthTimer->start();
-            removeItem(continueText);
-            delete continueText;
-        }
-        QList<QGraphicsItem*> enemyItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
-        for (QGraphicsItem* item : enemyItems) {
-            Enemy* enemy = dynamic_cast<Enemy*>(item);
-            if (enemy) {
-                enemy->toggleMovementPause();
-            }
-        }
-        QList<QGraphicsItem *> bulletItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
-        for (QGraphicsItem *item : bulletItems) {
-            EnemyBullet *bullet = dynamic_cast<EnemyBullet *>(item);
-            if (bullet) {
-                bullet->toggleMovementPause();
-            }
-        }
-        QList<QGraphicsItem *> bulletItems2 = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
-        for (QGraphicsItem *item : bulletItems2) {
-            PlayerBullet *bullet = dynamic_cast<PlayerBullet *>(item);
-            if (bullet) {
-                bullet->toggleMovementPause();
-
-            }
-        }
-
-    }
-
-void Scene::updateGameState()
-{
-    if (twoPlayer) {
-        if (player1 && player1->getHealth() == 0) {
-            removeItem(player1);
-            player1Die = 1;
-            qDebug() << "Player 1 Die";
-        }
-        if (player2 && player2->getHealth() == 0) {
-            removeItem(player2);
-            player2Die = 1;
-            qDebug() << "Player 2 Die";
-        }
-        if (player1Die && player2Die) {
-            clearLevelOne();
-        }
-    } else if (GameOn==levelOneWin) {
-        clearLevelOne();
-    }else if(player1->getHealth()==0){
-        clearLevelOne();
-    }
 }

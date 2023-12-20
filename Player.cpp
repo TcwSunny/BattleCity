@@ -1,4 +1,3 @@
-#include "Bullet.h"
 #include "Player.h"
 #include <QObject>
 
@@ -15,17 +14,6 @@ Player::Player(int num):Health(2)
     }
 
 
-    bullet = new PlayerBullet(this);
-}
-
-PlayerBullet *Player::getBullet() const
-{
-    return bullet;
-}
-
-void Player::setBullet(PlayerBullet *newBullet)
-{
-    bullet = newBullet;
 }
 
 int Player::getHealth() const

@@ -2,7 +2,6 @@
 #define WATER_H
 
 #include <QObject>
-#include <QObject>
 #include <QGraphicsPixmapItem>
 
 class Water:public QObject, public QGraphicsPixmapItem

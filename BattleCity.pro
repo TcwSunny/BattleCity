@@ -10,13 +10,8 @@ CONFIG += c++17
 
 SOURCES += \
     Brick.cpp \
-    Bullet.cpp \
     Castle.cpp \
-    Enemy.cpp \
-    EnemyBullet.cpp \
     Player.cpp \
-    PlayerBullet.cpp \
-    PowerUp.cpp \
     Scene.cpp \
     Tank.cpp \
     Trees.cpp \
@@ -26,13 +21,8 @@ SOURCES += \
 
 HEADERS += \
     Brick.h \
-    Bullet.h \
     Castle.h \
-    Enemy.h \
-    EnemyBullet.h \
     Player.h \
-    PlayerBullet.h \
-    PowerUp.h \
     Scene.h \
     Tank.h \
     Trees.h \
@@ -48,10 +38,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    res.qrc \
     res.qrc
-
-DISTFILES += \
-    BattleCity.pro.user \
-    LICENSE \
-    README.md
