@@ -6,7 +6,7 @@
 PowerUp::PowerUp()
 {
     QPixmap pixmap;
-    powerUpNumber  = QRandomGenerator::global()->bounded(1,2);
+    powerUpNumber  = QRandomGenerator::global()->bounded(1,3);
    // powerUpNumber =1;
 
     switch (powerUpNumber) {

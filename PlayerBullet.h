@@ -13,7 +13,7 @@ public:
 void toggleMovementPause();
     void move();
 signals:
-    void killOneEnemy();
+    //void killOneEnemy();
 private:
     bool isMovementPaused;
 

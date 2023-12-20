@@ -51,7 +51,7 @@ void Scene::keyPressEvent(QKeyEvent *event){
                 if(powerUp->getPowerUpNumber()==2){
                     player1->setHealth(player1->getHealth()+1);
                 }
-                if(powerUp->getPowerUpNumber()==1){
+                else if(powerUp->getPowerUpNumber()==1){
                     useGrenade();
                 }
                 removeItem(powerUp);
@@ -104,6 +104,17 @@ void Scene::keyPressEvent(QKeyEvent *event){
                 Water *water = dynamic_cast<Water *>(item2);
                 if (water) {
                     IsWater2 = true;
+                }
+                PowerUp *powerUp = dynamic_cast<PowerUp*>(item2);
+                if(powerUp){
+                    if(powerUp->getPowerUpNumber()==2){
+                        player2->setHealth(player2->getHealth()+1);
+                    }
+                    else if(powerUp->getPowerUpNumber()==1){
+                        useGrenade();
+                    }
+                    removeItem(powerUp);
+                    delete powerUp;
                 }
             }
             if(IsBrick2==0 && IsWater2==0){
@@ -180,7 +191,8 @@ void Scene::generateLevelOne()
     enemy->setZValue(-0.5);
     connect(enemy->getBullet(),&EnemyBullet::playerDie,this,&Scene::updateGameState);
     connect(enemy,&Enemy::enemyDie,this,&Scene::addScore);
-    connect(enemy,&Enemy::powerTankDie,this,&Scene::generatePowerUp);
+    connect(enemy,&Enemy::enemyDie,this,&Scene::killingCount);
+    connect(enemy,&Enemy::armorTankDie,this,&Scene::generatePowerUp);
     addItem(enemy);
     enemyTimer = new QTimer();
     connect(enemyTimer, &QTimer::timeout, this, [=]() {
@@ -190,6 +202,8 @@ void Scene::generateLevelOne()
             Enemy* enemy = new Enemy;
             connect(enemy->getBullet(),&EnemyBullet::playerDie,this,&Scene::updateGameState);
             connect(enemy,&Enemy::enemyDie,this,&Scene::addScore);
+            connect(enemy,&Enemy::enemyDie,this,&Scene::killingCount);
+            connect(enemy,&Enemy::armorTankDie,this,&Scene::generatePowerUp);
             enemy->setPos(enemyGenetate * 200, 10);
             enemy->setZValue(-0.5);
             addItem(enemy);
@@ -353,10 +367,10 @@ void Scene::generateLevelOne()
 
 
     connect(enemy->getBullet(),&EnemyBullet::castleDie,this,&Scene::clearLevelOne);
-    connect(player1->getBullet(),&PlayerBullet::killOneEnemy,this,&Scene::killingCount);
+    //connect(player1->getBullet(),&PlayerBullet::killOneEnemy,this,&Scene::killingCount);
 
     if(twoPlayer){
-    connect(player2->getBullet(),&PlayerBullet::killOneEnemy,this,&Scene::killingCount);
+    //connect(player2->getBullet(),&PlayerBullet::killOneEnemy,this,&Scene::killingCount);
     }
     //QTimer::singleShot(5000, this, &Scene::clearLevelOne);
 
@@ -538,7 +552,7 @@ void Scene::clearLevelOne()
         int posNumber ;
         posNumber = QRandomGenerator::global()->bounded(0,2);
         PowerUp* powerUp = new PowerUp;
-        powerUp->setPos(10+25*posNumber,200);
+        powerUp->setPos(10+224*posNumber,200);
         if(powerUp){
 
         addItem(powerUp);}

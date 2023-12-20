@@ -63,7 +63,7 @@ void PlayerBullet::move() {
                 Parent->setIsBulletInScene(0);
                 enemy->decreaseHealth();
                 if(enemy->getHealth()==0){
-                    emit killOneEnemy();
+                    //emit killOneEnemy();
                     delete enemy;
                 }
 

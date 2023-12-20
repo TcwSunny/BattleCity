@@ -70,8 +70,8 @@ Enemy::Enemy()
 
 Enemy::~Enemy()
 {
-    if(enemyState==3){
-        emit powerTankDie();
+    if(enemyState==4){
+        emit armorTankDie();
     }
     emit enemyDie(enemyState*100);
 
