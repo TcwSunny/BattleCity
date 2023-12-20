@@ -70,7 +70,11 @@ Enemy::Enemy()
 
 Enemy::~Enemy()
 {
+    if(enemyState==3){
+        emit powerTankDie();
+    }
     emit enemyDie(enemyState*100);
+
 }
 
 EnemyBullet *Enemy::getBullet() const

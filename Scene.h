@@ -19,11 +19,15 @@ public:
     void updateHealthText();
     void togglePause();
 
+    void useGrenade();
+
 public slots:
     void updateGameState();
     void clearLevelOne();
     void addScore(int newScore);
     void killingCount();
+    void generatePowerUp();
+
 
 private:
     Player *player1;

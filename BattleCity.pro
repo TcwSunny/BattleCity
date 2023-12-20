@@ -16,6 +16,7 @@ SOURCES += \
     EnemyBullet.cpp \
     Player.cpp \
     PlayerBullet.cpp \
+    PowerUp.cpp \
     Scene.cpp \
     Tank.cpp \
     Trees.cpp \
@@ -31,6 +32,7 @@ HEADERS += \
     EnemyBullet.h \
     Player.h \
     PlayerBullet.h \
+    PowerUp.h \
     Scene.h \
     Tank.h \
     Trees.h \

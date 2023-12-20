@@ -2,6 +2,7 @@
 #include "Brick.h"
 #include "Scene.h"
 #include "Water.h"
+#include "PowerUp.h"
 #include "Trees.h"
 #include "Castle.h"
 #include <QGraphicsPixmapItem>
@@ -25,6 +26,7 @@ Scene::Scene(QObject *parent)
     isGamePaused = false;
 
     //generateLevelTwo();
+
 }
 
 void Scene::keyPressEvent(QKeyEvent *event){
@@ -43,6 +45,17 @@ void Scene::keyPressEvent(QKeyEvent *event){
             Water *water = dynamic_cast<Water *>(item);
             if (water) {
                 IsWater = true;
+            }
+            PowerUp *powerUp = dynamic_cast<PowerUp*>(item);
+            if(powerUp){
+                if(powerUp->getPowerUpNumber()==2){
+                    player1->setHealth(player1->getHealth()+1);
+                }
+                if(powerUp->getPowerUpNumber()==1){
+                    useGrenade();
+                }
+                removeItem(powerUp);
+                delete powerUp;
             }
         }
         if(isGamePaused){
@@ -143,6 +156,7 @@ void Scene::keyPressEvent(QKeyEvent *event){
 }
 void Scene::generateLevelOne()
 {
+
     backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/backGround.jpg"));
     backGround->setZValue(-0.75);
     addItem(backGround);
@@ -166,6 +180,7 @@ void Scene::generateLevelOne()
     enemy->setZValue(-0.5);
     connect(enemy->getBullet(),&EnemyBullet::playerDie,this,&Scene::updateGameState);
     connect(enemy,&Enemy::enemyDie,this,&Scene::addScore);
+    connect(enemy,&Enemy::powerTankDie,this,&Scene::generatePowerUp);
     addItem(enemy);
     enemyTimer = new QTimer();
     connect(enemyTimer, &QTimer::timeout, this, [=]() {
@@ -215,6 +230,8 @@ void Scene::generateLevelOne()
     healthTimer= new QTimer();
     connect(healthTimer, &QTimer::timeout, this, &Scene::updateHealthText);
     healthTimer->start(500);
+
+
     for(int i= 0;i<5;i++){ //把堡壘的牆壁改厚一點 打五次才會消失
     Brick* brick =new Brick;
     brick->setPos(202,266);
@@ -342,6 +359,8 @@ void Scene::generateLevelOne()
     connect(player2->getBullet(),&PlayerBullet::killOneEnemy,this,&Scene::killingCount);
     }
     //QTimer::singleShot(5000, this, &Scene::clearLevelOne);
+
+
 }
 
 void Scene::generateLevelTwo()
@@ -507,9 +526,33 @@ void Scene::clearLevelOne()
     {
         killnum++;
         qDebug()<<killnum;
-        if(killnum==2){
+        if(killnum==20){
             GameOn = levelOneWin;
             updateGameState();
+        }
+    }
+
+    void Scene::generatePowerUp()
+    {
+        qDebug()<<"power tank die";
+        int posNumber ;
+        posNumber = QRandomGenerator::global()->bounded(0,2);
+        PowerUp* powerUp = new PowerUp;
+        powerUp->setPos(10+25*posNumber,200);
+        if(powerUp){
+
+        addItem(powerUp);}
+    }
+
+    void Scene::useGrenade()
+    {
+        QList<QGraphicsItem*> enemyItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
+        for (QGraphicsItem* item : enemyItems) {
+            Enemy* enemy = dynamic_cast<Enemy*>(item);
+            if (enemy) {
+            removeItem(enemy);
+            delete enemy;
+            }
         }
     }
 
@@ -596,6 +639,8 @@ void Scene::updateGameState()
             clearLevelOne();
         }
     } else if (GameOn==levelOneWin) {
+        clearLevelOne();
+    }else if(player1->getHealth()==0){
         clearLevelOne();
     }
 }

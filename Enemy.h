@@ -26,6 +26,7 @@ public slots:
 
 signals:
     void enemyDie(int newscore);
+    void powerTankDie();
 
 private:
     QTimer *timer;
