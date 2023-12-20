@@ -660,7 +660,9 @@ void Scene::updateGameState()
         if (player1Die && player2Die) {
             clearLevelOne();
         }
-    } else if (GameOn==levelOneWin) {
+    }
+
+    if (GameOn==levelOneWin) {
         clearLevelOne();
     }else if(player1->getHealth()==0){
         clearLevelOne();
