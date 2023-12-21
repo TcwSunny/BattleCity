@@ -12,7 +12,7 @@ class Scene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    enum gameOn{start, levelOneWin, levelTwoWin, end};
+    enum gameOn{start, levelOneWin, end};
     explicit Scene(QObject *parent = nullptr);
     void generateLevelOne();
     void generateLevelTwo();
@@ -20,6 +20,7 @@ public:
     void togglePause();
 
     void useGrenade();
+    void map();
 
 public slots:
     void updateGameState();
@@ -32,7 +33,7 @@ public slots:
 private:
     Player *player1;
     Player *player2;
-    Bullet *bullet1;
+   // Bullet *bullet1;
     gameOn GameOn;
 
     QGraphicsTextItem *healthText1;
@@ -52,6 +53,7 @@ private:
 
     int score;
     int killnum;
+    int generatedEnemyCount;
 
     bool isGamePaused ;
 
