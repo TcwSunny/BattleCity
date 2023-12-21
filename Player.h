@@ -2,7 +2,7 @@
 #define PLAYER_H
 
 #include "Tank.h"
-
+#include "PlayerBullet.h"
 #include <QObject>
 #include <QGraphicsPixmapItem>
 
@@ -15,9 +15,13 @@ public:
     int getHealth() const;
     void setHealth(int newHealth);
 
+    Bullet *getBullet() const;
+    void setBullet(Bullet *newBullet);
+
 signals:
 private:
     int Health;
+    Bullet *bullet;
 
 };
 

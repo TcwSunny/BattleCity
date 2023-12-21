@@ -65,6 +65,12 @@ void Scene::keyPressEvent(QKeyEvent *event){
                     player1->setPos(player1->x()+4,player1->y());
                 }
             }
+            if (event->key() == Qt::Key_Space && player1->getIsBulletInScene()==0) {
+                player1->getBullet()->setPos(player1->x()+12,player1->y()+12);
+                player1->getBullet()->Rotate(player1->getRotation());
+                addItem(player1->getBullet());
+                player1->setIsBulletInScene(1);
+            }
         }
         if(player2State == Alive){
             bool Stop2 = false;
@@ -99,6 +105,12 @@ void Scene::keyPressEvent(QKeyEvent *event){
                 }else if(player2->getRotation() == 270){
                     player2->setPos(player2->x()+4,player2->y());
                 }
+            }
+            if (event->key() == Qt::Key_E && player2->getIsBulletInScene()==0) {
+                player2->getBullet()->setPos(player2->x()+12,player2->y()+12);
+                player2->getBullet()->Rotate(player2->getRotation());
+                addItem(player2->getBullet());
+                player2->setIsBulletInScene(1);
             }
         }
     }

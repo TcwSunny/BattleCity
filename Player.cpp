@@ -13,6 +13,8 @@ Player::Player(int num):Health(2)
         pixmap = pixmap.scaled(QSize(32, 32));
         setPixmap(pixmap);
     }
+
+    bullet = new PlayerBullet(this);
 }
 
 int Player::getHealth() const
@@ -24,3 +26,14 @@ void Player::setHealth(int newHealth)
 {
     Health = newHealth;
 }
+
+Bullet *Player::getBullet() const
+{
+    return bullet;
+}
+
+void Player::setBullet(Bullet *newBullet)
+{
+    bullet = newBullet;
+}
+
