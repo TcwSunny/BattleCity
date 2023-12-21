@@ -169,10 +169,14 @@ void Scene::keyPressEvent(QKeyEvent *event){
     if (event->key() == Qt::Key_I) {
         GameOn = end;
     }
+    if (event->key() == Qt::Key_U) {
+        useGrenade();
+    }
 
 }
 void Scene::generateLevelOne()
 {
+
     map();
     killnum=0;
     backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/backGround.jpg"));
@@ -470,14 +474,16 @@ void Scene::generatePowerUp()
 
 void Scene::useGrenade()
     {
-        QList<QGraphicsItem*> enemyItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
-        for (QGraphicsItem* item : enemyItems) {
-            Enemy* enemy = dynamic_cast<Enemy*>(item);
-            if (enemy) {
+        if(GameOn==start){
+        QList<QGraphicsItem*> tankItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
+        for (QGraphicsItem* item : tankItems) {
+        Enemy* enemy = dynamic_cast<Enemy*>(item);
+        if (enemy) {
             removeItem(enemy);
             delete enemy;
-            }
+
         }
+        }}
     }
 
 void Scene::map()
