@@ -1,8 +1,5 @@
 #include "Scene.h"
-#include "Brick.h"
-#include "Water.h"
-#include "Trees.h"
-#include "Castle.h"
+#include "Environment.h"
 #include <QKeyEvent>
 #include <QRandomGenerator>
 #include <QDebug>
@@ -18,6 +15,7 @@ Scene::Scene(QObject *parent)
 
     gameState = Start;
 }
+
 void Scene::keyPressEvent(QKeyEvent *event){
     if(gameState == Start){
         if(event->key() == Qt::Key_1){
@@ -37,12 +35,8 @@ void Scene::keyPressEvent(QKeyEvent *event){
             bool Stop = false;
             QList<QGraphicsItem*> colliding_items = player1->collidingItems();
             foreach (QGraphicsItem *item, colliding_items) {
-                Brick *brick = dynamic_cast<Brick *>(item);
-                if (brick) {
-                    Stop = true;
-                }
-                Water *water = dynamic_cast<Water *>(item);
-                if (water) {
+                Environment *barrier = dynamic_cast<Environment *>(item);
+                if (barrier && (barrier->getMapState()== 0 || barrier->getMapState()== 1)) {
                     Stop = true;
                 }
             }
@@ -76,12 +70,8 @@ void Scene::keyPressEvent(QKeyEvent *event){
             bool Stop2 = false;
             QList<QGraphicsItem*> colliding_items = player2->collidingItems();
             foreach (QGraphicsItem *item, colliding_items) {
-                Brick *brick = dynamic_cast<Brick *>(item);
-                if (brick) {
-                    Stop2 = true;
-                }
-                Water *water = dynamic_cast<Water *>(item);
-                if (water) {
+                Environment *barrier = dynamic_cast<Environment *>(item);
+                if (barrier && (barrier->getMapState()== 0 || barrier->getMapState()== 1)) {
                     Stop2 = true;
                 }
             }
@@ -117,7 +107,6 @@ void Scene::keyPressEvent(QKeyEvent *event){
             updateGameState(LevelTwo);
         }
     }
-
 }
 
 void Scene::updateGameState(GameState newState)
@@ -129,7 +118,6 @@ void Scene::updateGameState(GameState newState)
         gameState = LevelTwo;
         clearLevel();
         generateLevel();
-
     }
 }
 
@@ -156,127 +144,52 @@ void Scene::generateLevel(){
         player2->setZValue(-0.5);
         addItem(player2);
     }
-
 }
+
 void Scene::LevelOneMap(){
-    for(int i= 0;i<5;i++){ //把堡壘的牆壁改厚一點 打五次才會消失
-        Brick* brick =new Brick;
-        brick->setPos(202,266);
-        addItem(brick);
-        Brick* brick3 =new Brick;
-        brick3->setPos(202,298);
-        addItem(brick3);
-        Brick* brick2 =new Brick;
-        brick2->setPos(234,266);
-        addItem(brick2);
-        Brick* brick4 =new Brick;
-        brick4->setPos(266,266);
-        addItem(brick4);
-        Brick* brick5 =new Brick;
-        brick5->setPos(266,298);
-        addItem(brick5);}
+    int BrickX[13] = {202, 202, 234, 266, 266, 74, 10, 138, 170, 106, 234, 270, 238};
+    int BrickY[13] = {266, 298, 266, 266, 298, 106, 202, 10, 170, 266, 106, 10, 10};
+    for(int i = 0; i <13;i++){
+        if(i<5){
+            for(int j= 0;j<5;j++){ //把堡壘的牆壁改厚一點 打五次才會消失
+                Bricks[i*5+j] =new Environment();
+                Bricks[i*5+j]->setBrick();
+                Bricks[i*5+j]->setPos(BrickX[i],BrickY[i]);
+                addItem(Bricks[i*5+j]);
 
-    Brick* brick6 =new Brick;
-    brick6->setPos(74,106);
-    addItem(brick6);
-    Brick* brick7 =new Brick;
-    brick7->setPos(10,202);
-    addItem(brick7);
-    Brick* brick8 =new Brick;
-    brick8->setPos(138,10);
-    addItem(brick8);
-    Brick* brick9 =new Brick;
-    brick9->setPos(170,170);
-    addItem(brick9);
-    Brick* brick10 =new Brick;
-    brick10->setPos(106,266);
-    addItem(brick10);
-    Brick* brick11 =new Brick;
-    brick11->setPos(234,106);
-    addItem(brick11);
-    Brick* brick12 =new Brick;
-    brick12->setPos(270,10);
-    addItem(brick12);
-    Brick* brick13 =new Brick;
-    brick13->setPos(270-32,10);
-    addItem(brick13);
+            }
+        }
+        else{
+            Bricks[i+20] =new Environment();
+            Bricks[i+20]->setBrick();
+            Bricks[i+20]->setPos(BrickX[i],BrickY[i]);
+            addItem(Bricks[i+20]);
+        }
+    }
 
-    Water* water = new Water;
-    water -> setPos(298,170);
-    addItem(water);
-    Water* water2 = new Water;
-    water2 -> setPos(330,170);
-    addItem(water2);
-    Water* water3 = new Water;
-    water3 -> setPos(330,138);
-    addItem(water3);
-    Water* water4 = new Water;
-    water4 -> setPos(298,138);
-    addItem(water4);
-    Water* water5 = new Water;
-    water5 -> setPos(298,106);
-    addItem(water5);
-    Water* water6 = new Water;
-    water6 -> setPos(330,106);
-    addItem(water6);
-    Water* water7 = new Water;
-    water7 -> setPos(362,138);
-    addItem(water7);
-    Water* water8 = new Water;
-    water8 -> setPos(362,170);
-    addItem(water8);
-    Water* water9 = new Water;
-    water9 -> setPos(298,74);
-    addItem(water9);
+    int WaterX[9] = {298, 330, 330, 298, 298, 330, 362, 362, 298};
+    int WaterY[9] = {170, 170, 138, 138, 106, 106, 138, 170, 74};
+    for(int i = 0; i <9;i++){
+            Water[i] =new Environment();
+            Water[i]->setWater();
+            Water[i]->setPos(WaterX[i],WaterY[i]);
+            addItem(Water[i]);
+    }
 
-    Trees* tree = new Trees;
-    Trees* tree2 = new Trees;
-    Trees* tree3 = new Trees;
-    Trees* tree4 = new Trees;
-    Trees* tree5 = new Trees;
-    Trees* tree6 = new Trees;
-    Trees* tree7 = new Trees;
-    Trees* tree8 = new Trees;
-    Trees* tree9 = new Trees;
-    Trees* tree10 = new Trees;
-    Trees* tree11 = new Trees;
-    tree8->setPos(330,74);
-    tree->setPos(362,42);
-    tree2->setPos(362,106);
-    tree3->setPos(394,10);
-    tree4->setPos(394,74);
-    tree5->setPos(394,138);
-    tree6->setPos(426,42);
-    tree7->setPos(426,106);
-    tree9->setPos(458,10);
-    tree10->setPos(458,74);
-    tree11->setPos(458,138);
-    tree->setZValue(1);
-    tree2->setZValue(1);
-    tree3->setZValue(1);
-    tree4->setZValue(1);
-    tree5->setZValue(1);
-    tree6->setZValue(1);
-    tree7->setZValue(1);
-    tree8->setZValue(1);
-    tree9->setZValue(1);
-    tree10->setZValue(1);
-    tree11->setZValue(1);
-    addItem(tree);
-    addItem(tree2);
-    addItem(tree3);
-    addItem(tree4);
-    addItem(tree5);
-    addItem(tree6);
-    addItem(tree7);
-    addItem(tree8);
-    addItem(tree9);
-    addItem(tree10);
-    addItem(tree11);
+    int TreesX[11] = {362, 362, 394, 394, 394, 426, 426, 330, 458, 458, 485};
+    int TreesY[11] = {42, 106, 10, 74, 138, 42, 106, 74, 10, 74, 138};
+    for(int i = 0; i <9;i++){
+        Trees[i] =new Environment();
+        Trees[i]->setTree();
+        Trees[i]->setPos(TreesX[i],TreesY[i]);
+        Trees[i]->setZValue(1);
+        addItem(Trees[i]);
+    }
 
-    Castle* castle = new Castle;
-    castle->setPos(234,298);
-    addItem(castle);
+    Castle = new Environment();
+    Castle->setCastle();
+    Castle->setPos(234,298);
+    addItem(Castle);
 }
 
 void Scene::clearLevel()
@@ -290,59 +203,59 @@ void Scene::clearLevel()
 
 void Scene::LevelTwoMap()
 {
-    Brick* brick =new Brick;
-    brick->setPos(10,266);
-    addItem(brick);
-    for(int i = 1;i<=13;i++){
-        Water* water =new Water;
-        water->setPos(10+i*32,266);
-        addItem(water);
-        Brick* brick =new Brick;
-        brick->setPos(10+i*32,266);
-        addItem(brick);
+    // Brick* brick =new Brick;
+    // brick->setPos(10,266);
+    // addItem(brick);
+    // for(int i = 1;i<=13;i++){
+    //     Water* water =new Water;
+    //     water->setPos(10+i*32,266);
+    //     addItem(water);
+    //     Brick* brick =new Brick;
+    //     brick->setPos(10+i*32,266);
+    //     addItem(brick);
 
-    }
-    for(int i = 0;i<=6;i++){
-        Brick* brick =new Brick;
-        brick->setPos(426,234-i*32);
-        addItem(brick);
-    }
-    for(int i = 0;i<=11;i++){
-        Water* water =new Water;
-        water->setPos(42+i*32,42);
-        addItem(water);
-        Brick* brick =new Brick;
-        brick->setPos(42+i*32,42);
-        addItem(brick);
-    }
-    for(int i = 0;i<=4;i++){
-        Brick* brick =new Brick;
-        brick->setPos(42,74+i*32);
-        addItem(brick);
-    }
-    for(int i = 0;i<=9;i++){
-        Brick* brick =new Brick;
-        brick->setPos(74+i*32,202);
-        addItem(brick);
-    }
+    // }
+    // for(int i = 0;i<=6;i++){
+    //     Brick* brick =new Brick;
+    //     brick->setPos(426,234-i*32);
+    //     addItem(brick);
+    // }
+    // for(int i = 0;i<=11;i++){
+    //     Water* water =new Water;
+    //     water->setPos(42+i*32,42);
+    //     addItem(water);
+    //     Brick* brick =new Brick;
+    //     brick->setPos(42+i*32,42);
+    //     addItem(brick);
+    // }
+    // for(int i = 0;i<=4;i++){
+    //     Brick* brick =new Brick;
+    //     brick->setPos(42,74+i*32);
+    //     addItem(brick);
+    // }
+    // for(int i = 0;i<=9;i++){
+    //     Brick* brick =new Brick;
+    //     brick->setPos(74+i*32,202);
+    //     addItem(brick);
+    // }
 
-    for(int i = 0;i<=2;i++){
-        Brick* brick =new Brick;
-        brick->setPos(362,170-i*32);
-        addItem(brick);
-    }
-    for(int i = 0;i<=7;i++){
-        Brick* brick =new Brick;
-        brick->setPos(106+i*32,106);
-        addItem(brick);
-    }
-    for(int i = 0;i<=7;i++){
-        Water* water =new Water;
-        water->setPos(106+i*32,138);
-        addItem(water);
-        Water* water2 =new Water;
-        water2->setPos(106+i*32,170);
-        addItem(water2);
-    }
+    // for(int i = 0;i<=2;i++){
+    //     Brick* brick =new Brick;
+    //     brick->setPos(362,170-i*32);
+    //     addItem(brick);
+    // }
+    // for(int i = 0;i<=7;i++){
+    //     Brick* brick =new Brick;
+    //     brick->setPos(106+i*32,106);
+    //     addItem(brick);
+    // }
+    // for(int i = 0;i<=7;i++){
+    //     Water* water =new Water;
+    //     water->setPos(106+i*32,138);
+    //     addItem(water);
+    //     Water* water2 =new Water;
+    //     water2->setPos(106+i*32,170);
+    //     addItem(water2);
+    // }
 
 }

@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include "Player.h"
+#include "Environment.h"
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
 
@@ -26,6 +27,11 @@ private:
     bool twoPlayer;
     Player *player1;
     Player *player2;
+
+    Environment* Bricks[35] = {} ;
+    Environment* Water[30] = {} ;
+    Environment* Trees[30] = {};
+    Environment* Castle;
 
 };
 

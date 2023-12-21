@@ -9,24 +9,18 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    Brick.cpp \
-    Castle.cpp \
+    Environment.cpp \
     Player.cpp \
     Scene.cpp \
     Tank.cpp \
-    Trees.cpp \
-    Water.cpp \
     main.cpp \
     widget.cpp
 
 HEADERS += \
-    Brick.h \
-    Castle.h \
+    Environment.h \
     Player.h \
     Scene.h \
     Tank.h \
-    Trees.h \
-    Water.h \
     widget.h
 
 FORMS += \
