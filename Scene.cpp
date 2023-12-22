@@ -24,7 +24,8 @@ Scene::Scene(QObject *parent)
     score = 0;
     killnum = 0;
     isGamePaused = false;
-
+    highestScore =0;
+    showFinal=0;//bool
     //generateLevelTwo();
 
 }
@@ -277,7 +278,11 @@ void Scene::generateLevel()
     //connect(player2->getBullet(),&PlayerBullet::killOneEnemy,this,&Scene::killingCount);
     }
     //QTimer::singleShot(5000, this, &Scene::clearLevelOne);
+    if(showFinal==1){
+        removeItem(finalText);
+        showFinal =0;
 
+    }
 
 }
 
@@ -615,6 +620,27 @@ void Scene::map2()
         }
     }
 
+    void Scene::showFinalScore()
+    {
+        showFinal=1;
+        if(highestScore <= score){
+            highestScore = score;
+        }
+        finalText = new QGraphicsTextItem();
+        QString scoreStr2 = QString("       Score : %1\nHighest Score: %2").arg(score).arg(highestScore);
+        finalText->setPlainText(scoreStr2);
+        finalText->setPos(50,80);
+        finalText->setZValue(1.5);
+        QFont font;
+        font.setPointSize(30);  // Set the font size to 16
+        font.setBold(true);
+        finalText->setFont(font);
+        QColor textColor(Qt::white);
+        finalText->setDefaultTextColor(textColor);
+        addItem(finalText);
+        qDebug()<<score;
+    }
+
 
 
 
@@ -702,6 +728,7 @@ void Scene::updateGameState()
 
                 GameOn = end;
                 clearLevelOne();
+                showFinalScore();
             }else if(GameOn == levelOneWin ||GameOn == levelTwoWin ){
                 if(player1){
                 removeItem(player1);
@@ -720,7 +747,9 @@ void Scene::updateGameState()
                 GameOn = end;
                 qDebug()<<"單人 輸了";
                 removeItem(player1);
+                showFinalScore();
                 clearLevelOne();
+
             }else if(GameOn == levelOneWin ||GameOn == levelTwoWin ){
                 removeItem(player1);
                 if(GameOn == levelOneWin){qDebug()<<"level one win";}

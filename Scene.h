@@ -22,6 +22,8 @@ public:
     void map1();
     void map2();
 
+    void showFinalScore();
+
 
 
 public slots:
@@ -43,6 +45,7 @@ private:
     QGraphicsTextItem *pauseText;
     QGraphicsTextItem *continueText;
     QGraphicsTextItem *scoreText;
+    QGraphicsTextItem *finalText;
 
     QTimer *healthTimer;
     QTimer *enemyTimer;
@@ -52,8 +55,10 @@ private:
 
     bool player1Die;
     bool player2Die;
+    bool showFinal;
 
     int score;
+    int highestScore;
     int killnum;
     int generatedEnemyCount;
 
