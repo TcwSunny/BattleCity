@@ -33,19 +33,19 @@ void Scene::keyPressEvent(QKeyEvent *event){
     if (event->key() == Qt::Key_P) {
         togglePause();
     }
-    if((GameOn == end ||GameOn==levelOneWin) && (event->key() == Qt::Key_1)){
-        GameOn = start;
+    if((GameOn == end ||GameOn==levelOneWin||GameOn==levelTwoWin) && (event->key() == Qt::Key_1)){
+
         twoPlayer = 0;
-        generateLevelOne();
+        generateLevel();
         qDebug() << "Start"<<twoPlayer;
-    }else if((GameOn == end ||GameOn==levelOneWin) && (event->key() == Qt::Key_2)){
-        GameOn = start;
+    }else if((GameOn == end ||GameOn==levelOneWin||GameOn==levelTwoWin) && (event->key() == Qt::Key_2)){
+
         twoPlayer = 1;
-        generateLevelOne();
+        generateLevel();
         qDebug() << "Start"<<twoPlayer;
     }
 
-    if(GameOn == start){
+    if(GameOn == game1||GameOn==game2){
         bool IsBrick = false;
         bool IsWater = false;
         QList<QGraphicsItem*> colliding_items = player1->collidingItems();
@@ -126,7 +126,7 @@ void Scene::keyPressEvent(QKeyEvent *event){
                         useGrenade();
                     }
                     removeItem(powerUp);
-                    delete powerUp;
+                   // delete powerUp;
                 }
             }
             if(IsBrick2==0 && IsWater2==0){
@@ -174,10 +174,14 @@ void Scene::keyPressEvent(QKeyEvent *event){
     }
 
 }
-void Scene::generateLevelOne()
+void Scene::generateLevel()
 {
-
-    map();
+    if(GameOn==levelOneWin){
+        map2();
+        GameOn = game2;
+    }else{
+    GameOn = game1;
+    map1();}
     killnum=0;
     backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/backGround.jpg"));
     backGround->setZValue(-0.75);
@@ -204,7 +208,8 @@ void Scene::generateLevelOne()
     connect(enemy->getBullet(),&EnemyBullet::playerDie,this,&Scene::updateGameState);
     connect(enemy,&Enemy::enemyDie,this,&Scene::addScore);
     connect(enemy,&Enemy::enemyDie,this,&Scene::killingCount);
-    connect(enemy,&Enemy::armorTankDie,this,&Scene::generatePowerUp);
+
+    //connect(enemy,&Enemy::armorTankDie,this,&Scene::generatePowerUp);
     addItem(enemy);
 
     enemyTimer = new QTimer();
@@ -217,7 +222,8 @@ void Scene::generateLevelOne()
             connect(enemy->getBullet(),&EnemyBullet::playerDie,this,&Scene::updateGameState);
             connect(enemy,&Enemy::enemyDie,this,&Scene::addScore);
             connect(enemy,&Enemy::enemyDie,this,&Scene::killingCount);
-            connect(enemy,&Enemy::armorTankDie,this,&Scene::generatePowerUp);
+
+            //connect(enemy,&Enemy::armorTankDie,this,&Scene::generatePowerUp);
             enemy->setPos(enemyGenetate * 200, 10);
             enemy->setZValue(-0.5);
             addItem(enemy);
@@ -274,69 +280,12 @@ void Scene::generateLevelOne()
 
 }
 
-void Scene::generateLevelTwo()
-{
-    Brick* brick =new Brick;
-    brick->setPos(10,266);
-    addItem(brick);
-    for(int i = 1;i<=13;i++){
-        Water* water =new Water;
-        water->setPos(10+i*32,266);
-        addItem(water);
-        Brick* brick =new Brick;
-        brick->setPos(10+i*32,266);
-        addItem(brick);
-
-    }
-    for(int i = 0;i<=6;i++){
-        Brick* brick =new Brick;
-        brick->setPos(426,234-i*32);
-        addItem(brick);
-    }
-    for(int i = 0;i<=11;i++){
-        Water* water =new Water;
-        water->setPos(42+i*32,42);
-        addItem(water);
-        Brick* brick =new Brick;
-        brick->setPos(42+i*32,42);
-        addItem(brick);
-    }
-    for(int i = 0;i<=4;i++){
-        Brick* brick =new Brick;
-        brick->setPos(42,74+i*32);
-        addItem(brick);
-    }
-    for(int i = 0;i<=9;i++){
-        Brick* brick =new Brick;
-        brick->setPos(74+i*32,202);
-        addItem(brick);
-    }
-
-    for(int i = 0;i<=2;i++){
-        Brick* brick =new Brick;
-        brick->setPos(362,170-i*32);
-        addItem(brick);
-    }
-    for(int i = 0;i<=7;i++){
-        Brick* brick =new Brick;
-        brick->setPos(106+i*32,106);
-        addItem(brick);
-    }
-    for(int i = 0;i<=7;i++){
-        Water* water =new Water;
-        water->setPos(106+i*32,138);
-        addItem(water);
-        Water* water2 =new Water;
-        water2->setPos(106+i*32,170);
-        addItem(water2);
-    }
-}
 
 
 void Scene::clearLevelOne()
 {
 
-    qDebug() << "123";
+    qDebug() << "清除畫面";
     enemyTimer->stop();
     delete enemyTimer;
 
@@ -408,7 +357,7 @@ void Scene::clearLevelOne()
         PowerUp* powerUp = dynamic_cast<PowerUp*>(item);
         if (powerUp) {
             removeItem(powerUp);
-             delete powerUp;
+            //delete powerUp;
         }
     }
 
@@ -424,25 +373,30 @@ void Scene::clearLevelOne()
     removeItem(pauseText);
     delete pauseText;
 
-    backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/End1Player.jpg"));
-    backGround->setZValue(-0.75);
-    addItem(backGround);
-/**
-    QFont font;
-    font.setPointSize(50);
-    font.setBold(true);
-    scoreText->setFont(font);
-    scoreText->setPos(134, 110);
-    qDebug()<<GameOn;
-**/
+    removeItem(scoreText);
+    addScore(0);
+    delete scoreText;
+
+    //backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/End1Player.jpg"));
+    //backGround->setZValue(-0.75);
+   //addItem(backGround);
+
 }
 
 void Scene::addScore(int newScore)
     {
-        if(GameOn==start){
+        if(GameOn==game1||GameOn==game2){
 
             score = score+newScore;
 
+            QString scoreStr = QString("Score : %2").arg(score);
+            scoreText->setPlainText(scoreStr);
+
+            if(newScore==400){
+             generatePowerUp();
+            }
+        }else if(GameOn == end){
+            score = 0;
             QString scoreStr = QString("Score : %2").arg(score);
             scoreText->setPlainText(scoreStr);
         }
@@ -451,42 +405,44 @@ void Scene::addScore(int newScore)
 
 void Scene::killingCount()
     {
-        if(GameOn==start){
+        if(GameOn==game1||GameOn==game2){
         killnum++;
         qDebug()<<killnum;
-        if(killnum==5){
+        if(killnum==5&&GameOn==game1){
             GameOn = levelOneWin;
+            updateGameState();
+        }else if(killnum==5&&GameOn==game2){
+            GameOn = levelTwoWin;
             updateGameState();
         }}
     }
 
 void Scene::generatePowerUp()
     {
+
         qDebug()<<"power tank die";
         int posNumber ;
-        posNumber = QRandomGenerator::global()->bounded(0,5);
+        posNumber = QRandomGenerator::global()->bounded(0,9);
         PowerUp* powerUp = new PowerUp;
-        powerUp->setPos(10+96*posNumber,200);
+        powerUp->setPos(10+64*posNumber,234);
         if(powerUp){
-
-        addItem(powerUp);}
+            addItem(powerUp);}
     }
 
 void Scene::useGrenade()
     {
-        if(GameOn==start){
+        if(GameOn==game1||GameOn==game2){
         QList<QGraphicsItem*> tankItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
         for (QGraphicsItem* item : tankItems) {
         Enemy* enemy = dynamic_cast<Enemy*>(item);
         if (enemy) {
             removeItem(enemy);
             delete enemy;
-
         }
         }}
     }
 
-void Scene::map()
+void Scene::map1()
     {
         for(int i= 0;i<5;i++){ //把堡壘的牆壁改厚一點 打五次才會消失
             Brick* brick =new Brick;
@@ -607,6 +563,60 @@ void Scene::map()
         castle->setPos(234,298);
         addItem(castle);
     }
+void Scene::map2()
+    {
+        Brick* brick =new Brick;
+        brick->setPos(10,266);
+        addItem(brick);
+        for(int i = 1;i<=13;i++){
+            Brick* brick =new Brick;
+            brick->setPos(10+i*32,266);
+            addItem(brick);
+        }
+        for(int i = 0;i<=6;i++){
+            Brick* brick =new Brick;
+            brick->setPos(426,234-i*32);
+            addItem(brick);
+        }
+        for(int i = 0;i<=11;i++){
+
+            Brick* brick =new Brick;
+            brick->setPos(42+i*32,42);
+            addItem(brick);
+        }
+        for(int i = 0;i<=4;i++){
+            Brick* brick =new Brick;
+            brick->setPos(42,74+i*32);
+            addItem(brick);
+        }
+        for(int i = 0;i<=9;i++){
+            Brick* brick =new Brick;
+            brick->setPos(74+i*32,202);
+            addItem(brick);
+        }
+        for(int i = 0;i<=2;i++){
+            Brick* brick =new Brick;
+            brick->setPos(362,170-i*32);
+            addItem(brick);
+        }
+        for(int i = 0;i<=7;i++){
+            Brick* brick =new Brick;
+            brick->setPos(106+i*32,106);
+            addItem(brick);
+        }
+        for(int i = 0;i<=7;i++){
+            Water* water =new Water;
+            water->setPos(106+i*32,138);
+            addItem(water);
+            Water* water2 =new Water;
+            water2->setPos(106+i*32,170);
+            addItem(water2);
+        }
+    }
+
+
+
+
 
 void Scene::updateHealthText()
     {
@@ -695,6 +705,11 @@ void Scene::updateGameState()
 
     if (GameOn==levelOneWin) {
         removeItem(player1);
+        qDebug()<<"level one win";
+        clearLevelOne();
+    }else if(GameOn==levelTwoWin){
+        removeItem(player1);
+        qDebug()<<"level two win";
         clearLevelOne();
     }else if(player1->getHealth()==0){
         GameOn=end;

@@ -12,15 +12,17 @@ class Scene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    enum gameOn{start, levelOneWin, end};
+    enum gameOn{game1,game2, levelOneWin,levelTwoWin, end};
     explicit Scene(QObject *parent = nullptr);
-    void generateLevelOne();
-    void generateLevelTwo();
+    void generateLevel();
     void updateHealthText();
     void togglePause();
 
     void useGrenade();
-    void map();
+    void map1();
+    void map2();
+
+
 
 public slots:
     void updateGameState();
