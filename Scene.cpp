@@ -11,6 +11,7 @@
 #include <QDebug>
 #include <QTimer>
 #include <QFont>
+#include <QCoreApplication>
 
 Scene::Scene(QObject *parent)
     :QGraphicsScene{parent}
@@ -66,6 +67,21 @@ void Scene::keyPressEvent(QKeyEvent *event){
                 }
                 else if(powerUp->getPowerUpNumber()==1){
                     useGrenade();
+                }else if(powerUp->getPowerUpNumber()==3){
+
+                    helmetTimer=new QTimer();
+                    // 设置计时器的超时时间为10秒
+                    helmetTimer->start(10000);
+                    // 连接计时器的timeout信号到槽函数
+                     qDebug() << "計時開始";
+                    player1->setHelmetOn(1);
+                    connect(helmetTimer, &QTimer::timeout, this, [=]() {
+                        qDebug() << "计时器超时，已经过了10秒";
+                        player1->setHelmetOn(0);
+                        helmetTimer->stop();// 在超时时退出应用程序
+                    });
+
+
                 }
                 removeItem(powerUp);
                 delete powerUp;
@@ -125,6 +141,21 @@ void Scene::keyPressEvent(QKeyEvent *event){
                     }
                     else if(powerUp->getPowerUpNumber()==1){
                         useGrenade();
+                    }else if(powerUp->getPowerUpNumber()==3){
+
+                        helmetTimer=new QTimer();
+                        // 设置计时器的超时时间为10秒
+                        helmetTimer->start(10000);
+                        // 连接计时器的timeout信号到槽函数
+                        qDebug() << "計時開始";
+                        player1->setHelmetOn(1);
+                        connect(helmetTimer, &QTimer::timeout, this, [=]() {
+                            qDebug() << "10秒結束";
+                            player1->setHelmetOn(0);
+                            helmetTimer->stop();// 在超时时退出应用程序
+                        });
+
+
                     }
                     removeItem(powerUp);
                    // delete powerUp;
@@ -168,7 +199,7 @@ void Scene::keyPressEvent(QKeyEvent *event){
         qDebug()<<GameOn;
     }
     if (event->key() == Qt::Key_I) {
-        qDebug()<<castle->getHealth();
+        qDebug()<<player1->getHelmetOn();
     }
     if (event->key() == Qt::Key_U) {
         useGrenade();
@@ -259,7 +290,7 @@ void Scene::generateLevel()
     addItem(pauseText);
 
     scoreText = new QGraphicsTextItem();
-    scoreText->setPos(510,150); // Adjust the position as needed
+    scoreText->setPos(505,150); // Adjust the position as needed
     scoreText->setDefaultTextColor(textColor);
     QString scoreStr = QString("Score :  %1").arg(score);;
     scoreText->setPlainText(scoreStr);
@@ -430,7 +461,7 @@ void Scene::generatePowerUp()
 
         qDebug()<<"power tank die";
         int posNumber ;
-        posNumber = QRandomGenerator::global()->bounded(0,9);
+        posNumber = QRandomGenerator::global()->bounded(0,8);
         PowerUp* powerUp = new PowerUp;
         powerUp->setPos(10+64*posNumber,234);
         if(powerUp){

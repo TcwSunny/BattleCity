@@ -51,6 +51,7 @@ private:
 
     QTimer *healthTimer;
     QTimer *enemyTimer;
+    QTimer *helmetTimer;
     QGraphicsPixmapItem *backGround;
 
     bool twoPlayer;

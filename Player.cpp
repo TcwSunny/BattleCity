@@ -2,7 +2,7 @@
 #include "Player.h"
 #include <QObject>
 
-Player::Player(int num):Health(2)
+Player::Player(int num):Health(2),helmetOn(0)
 {
     if(num == 1){
         QPixmap pixmap(":/images/Images/Tank_Player1.png");
@@ -36,4 +36,14 @@ int Player::getHealth() const
 void Player::setHealth(int newHealth)
 {
     Health = newHealth;
+}
+
+void Player::setHelmetOn(bool hel)
+{
+    helmetOn = hel;
+}
+
+bool Player::getHelmetOn()
+{
+    return helmetOn;
 }

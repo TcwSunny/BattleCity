@@ -6,8 +6,8 @@
 PowerUp::PowerUp()
 {
     QPixmap pixmap;
-    powerUpNumber  = QRandomGenerator::global()->bounded(1,3);
-    //powerUpNumber =1;
+    powerUpNumber  = QRandomGenerator::global()->bounded(1,4);
+   // powerUpNumber =3;
 
     switch (powerUpNumber) {
     case 1:
@@ -19,8 +19,7 @@ PowerUp::PowerUp()
 
         break;
     case 3:
-        pixmap.load(":/images/Images/Powerup_Timer.png");
-
+        pixmap.load(":/images/Images/Powerup_Helmet.png");
         break;
     }
     pixmap = pixmap.scaled(QSize(32, 32));
@@ -39,7 +38,7 @@ PowerUp::~PowerUp()
         qDebug()<<"Tank.";
         break;
     case 3:
-        qDebug()<<"Time";
+        qDebug()<<"Helmet";
         break;
 
     }

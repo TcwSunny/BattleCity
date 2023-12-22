@@ -62,9 +62,11 @@ void EnemyBullet::move() {
                 Parent->setIsBulletInScene(0);
                 Player *player = dynamic_cast<Player*>(item);
                 int playerHealth = player->getHealth();
-                player->setHealth(playerHealth - 1);
-                if(player->getHealth()==0){
 
+                if(player->getHelmetOn()==0){
+                   player->setHealth(playerHealth - 1);
+                }
+                if(player->getHealth()==0){
                     emit playerDie();
                 }
             }

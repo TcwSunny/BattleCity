@@ -19,11 +19,14 @@ public:
     int getHealth() const;
     void setHealth(int newHealth);
 
+    void setHelmetOn(bool hel);
+    bool getHelmetOn();
+
 signals:
 private:
     PlayerBullet *bullet;
     int Health;
-
+    bool helmetOn;
 };
 
 #endif // PLAYER_H
