@@ -1,7 +1,7 @@
-#include "PlayerBullet.h"
-#include "Environment.h"
-#include "Tank.h"
-#include "Enemy.h"
+#include "EnemyBullet.h"
+#include "Player.h"
+#include "Scene.h"
+
 #include <QObject>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
@@ -9,16 +9,18 @@
 #include <QDebug>
 #include <QTimer>
 
-PlayerBullet::PlayerBullet(Tank *tank) : Bullet(tank) {
+
+EnemyBullet::EnemyBullet(Tank *tank,int speed):Bullet(tank)
+{
     setPixmap(QPixmap(":/images/Images/bullet.png"));
 
-    timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &Bullet::move);
-    timer->start(50);
-
+    timer = new QTimer(this);//跟著Bullet Delete掉
+    connect(timer, &QTimer::timeout, this, &EnemyBullet::move);//當發生time out時使用這個物件的move處理
+    timer->start(speed); // 移動速度
     Parent = tank;
 }
-void PlayerBullet::move() {
+void EnemyBullet::move() {
+
     if(x()>15 && x()<475 && y()>15 && y()<315){
 
         QList<QGraphicsItem*> colliding_items = collidingItems();
@@ -30,17 +32,12 @@ void PlayerBullet::move() {
                 delete barrier;
                 scene()->removeItem(this);
             }else{
-                Enemy *enemy = dynamic_cast<Enemy*>(item);
-                if (enemy) {
+                Player *player = dynamic_cast<Player*>(item);
+                if (player) {
                     Parent->setIsBulletInScene(0);
-                    enemy->decreaseHealth();
-                    if(enemy->getHealth()==0){
-                        delete enemy;
-                    }
+                    player->setHealth(player->getHealth()-1);
                     scene()->removeItem(this);
                 }
-
-
             }
 
         }

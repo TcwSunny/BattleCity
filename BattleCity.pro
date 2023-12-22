@@ -10,6 +10,8 @@ CONFIG += c++17
 
 SOURCES += \
     Bullet.cpp \
+    Enemy.cpp \
+    EnemyBullet.cpp \
     Environment.cpp \
     Player.cpp \
     Playerbullet.cpp \
@@ -20,6 +22,8 @@ SOURCES += \
 
 HEADERS += \
     Bullet.h \
+    Enemy.h \
+    EnemyBullet.h \
     Environment.h \
     Player.h \
     Playerbullet.h \

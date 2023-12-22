@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "Environment.h"
+#include "Enemy.h"
 #include <QKeyEvent>
 #include <QRandomGenerator>
 #include <QDebug>
@@ -156,6 +157,31 @@ void Scene::generateLevel(){
         player2->setZValue(-0.5);
         addItem(player2);
     }
+
+    Enemy* enemy = new Enemy;
+    enemy->setPos(10,10);
+    enemy->setZValue(-0.5);
+    addItem(enemy);
+
+//    enemyTimer = new QTimer();
+//    connect(enemyTimer, &QTimer::timeout, this, [=]() {
+//        static int generatedEnemyCount = 0;
+//        if (generatedEnemyCount < 19) {
+//            int enemyGenetate = QRandomGenerator::global()->bounded(0, 3);
+//            Enemy* enemy = new Enemy;
+//            connect(enemy->getBullet(),&EnemyBullet::playerDie,this,&Scene::updateGameState);
+//            connect(enemy,&Enemy::enemyDie,this,&Scene::addScore);
+//            connect(enemy,&Enemy::enemyDie,this,&Scene::killingCount);
+//            connect(enemy,&Enemy::armorTankDie,this,&Scene::generatePowerUp);
+//            enemy->setPos(enemyGenetate * 200, 10);
+//            enemy->setZValue(-0.5);
+//            addItem(enemy);
+//            generatedEnemyCount++;
+//        } else {
+//            enemyTimer->stop();  // 生成 20 台敵人坦克後停止計時器
+//        }
+//    });
+//    enemyTimer->start(4000);
 }
 
 void Scene::LevelOneMap(){
