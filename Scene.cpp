@@ -258,7 +258,8 @@ void Scene::generateLevel()
     scoreText = new QGraphicsTextItem();
     scoreText->setPos(510,150); // Adjust the position as needed
     scoreText->setDefaultTextColor(textColor);
-    QString scoreStr = QString("Score : %2");
+    QString scoreStr = QString("Score :  ");
+    scoreText->setPlainText(scoreStr);
     addItem(scoreText);
 
     healthTimer= new QTimer();
@@ -373,10 +374,10 @@ void Scene::clearLevelOne()
     removeItem(pauseText);
     delete pauseText;
 
+
     removeItem(scoreText);
     addScore(0);
     delete scoreText;
-
     //backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/End1Player.jpg"));
     //backGround->setZValue(-0.75);
    //addItem(backGround);
@@ -686,37 +687,47 @@ void Scene::togglePause()
 
 void Scene::updateGameState()
 {
-    if (twoPlayer) {
-        if (player1 && player1->getHealth() == 0) {
-            removeItem(player1);
-            player1Die = 1;
-            qDebug() << "Player 1 Die";
-        }
-        if (player2 && player2->getHealth() == 0) {
-            removeItem(player2);
-            player2Die = 1;
-            qDebug() << "Player 2 Die";
-        }
-        if (player1Die && player2Die) {
-            GameOn = end;
-            clearLevelOne();
-        }
-    }
+        if(twoPlayer==1){
+            if(player1 && player1->getHealth()==0){
+                removeItem(player1);
+                player1Die = 1;
+                qDebug() << "Player 1 Die";
+            }else if(player2 && player2->getHealth()==0){
+                removeItem(player2);
+                player2Die =1;
+                qDebug()<<"player 2 die";
+            }
+            if(player1Die==1 && player2Die==1){
+                qDebug()<<player1Die<<" "<<player2Die<<" 雙人 輸了";
 
-    if (GameOn==levelOneWin) {
-        removeItem(player1);
-        if(twoPlayer){removeItem(player2);}
-        qDebug()<<"level one win";
-        clearLevelOne();
-    }else if(GameOn==levelTwoWin){
-        removeItem(player1);
-        if(twoPlayer){removeItem(player2);}
-        qDebug()<<"level two win";
-        clearLevelOne();
-    }else if(player1->getHealth()==0){
-        GameOn=end;
-        qDebug()<<GameOn;
-        removeItem(player1);
-        clearLevelOne();
-    }
-}
+                GameOn = end;
+                clearLevelOne();
+            }else if(GameOn == levelOneWin ||GameOn == levelTwoWin ){
+                if(player1){
+                removeItem(player1);
+                }
+                if(player2){
+                removeItem(player2);
+                }
+                if(GameOn == levelOneWin){qDebug()<<"level one win";}
+                if(GameOn == levelTwoWin){qDebug()<<"level Two win";}
+                clearLevelOne();
+
+            }
+        }else if(twoPlayer==0){
+            if(player1->getHealth()==0){
+                player1Die=1;
+                GameOn = end;
+                qDebug()<<"單人 輸了";
+                removeItem(player1);
+                clearLevelOne();
+            }else if(GameOn == levelOneWin ||GameOn == levelTwoWin ){
+                removeItem(player1);
+                if(GameOn == levelOneWin){qDebug()<<"level one win";}
+                if(GameOn == levelTwoWin){qDebug()<<"level Two win";}
+                clearLevelOne();
+            }
+        }
+
+        }
+
