@@ -705,12 +705,12 @@ void Scene::updateGameState()
 
     if (GameOn==levelOneWin) {
         removeItem(player1);
-        if(player2){removeItem(player2);}
+        if(twoPlayer){removeItem(player2);}
         qDebug()<<"level one win";
         clearLevelOne();
     }else if(GameOn==levelTwoWin){
         removeItem(player1);
-        if(player2){removeItem(player2);}
+        if(twoPlayer){removeItem(player2);}
         qDebug()<<"level two win";
         clearLevelOne();
     }else if(player1->getHealth()==0){
