@@ -259,7 +259,7 @@ void Scene::generateLevel()
     scoreText = new QGraphicsTextItem();
     scoreText->setPos(510,150); // Adjust the position as needed
     scoreText->setDefaultTextColor(textColor);
-    QString scoreStr = QString("Score :  ");
+    QString scoreStr = QString("Score :  %1").arg(score);;
     scoreText->setPlainText(scoreStr);
     addItem(scoreText);
 
