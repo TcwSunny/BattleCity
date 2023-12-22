@@ -67,10 +67,15 @@ void EnemyBullet::move() {
 
                     emit playerDie();
                 }
-            }else if(dynamic_cast<Castle*>(item)){
+            }
+            if(dynamic_cast<Castle*>(item)){
                 scene()->removeItem(this);
                 Parent->setIsBulletInScene(0);
-                emit castleDie();
+                Castle *castle = dynamic_cast<Castle*>(item);
+                int castleHealth = castle->getHealth();
+                castle->setHealth(castleHealth-1);
+                if(castle->getHealth()==0){
+                    emit castleDie();}
             }
             break;
         }

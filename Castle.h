@@ -9,6 +9,10 @@ class Castle : public QGraphicsPixmapItem
 {
 public:
     Castle();
+    void setHealth(int newHealth);
+    int getHealth();
+private:
+    int health;
 };
 
 #endif // CASTLE_H

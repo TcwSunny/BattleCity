@@ -168,7 +168,7 @@ void Scene::keyPressEvent(QKeyEvent *event){
         qDebug()<<GameOn;
     }
     if (event->key() == Qt::Key_I) {
-        GameOn = end;
+        qDebug()<<castle->getHealth();
     }
     if (event->key() == Qt::Key_U) {
         useGrenade();
@@ -207,6 +207,7 @@ void Scene::generateLevel()
     enemy->setPos(10,10);
     enemy->setZValue(-0.5);
     connect(enemy->getBullet(),&EnemyBullet::playerDie,this,&Scene::updateGameState);
+    connect(enemy->getBullet(),&EnemyBullet::castleDie,this,&Scene::updateGameState);
     connect(enemy,&Enemy::enemyDie,this,&Scene::addScore);
     connect(enemy,&Enemy::enemyDie,this,&Scene::killingCount);
 
@@ -221,6 +222,7 @@ void Scene::generateLevel()
             int enemyGenetate = QRandomGenerator::global()->bounded(0, 3);
             Enemy* enemy = new Enemy;
             connect(enemy->getBullet(),&EnemyBullet::playerDie,this,&Scene::updateGameState);
+            connect(enemy->getBullet(),&EnemyBullet::castleDie,this,&Scene::updateGameState);
             connect(enemy,&Enemy::enemyDie,this,&Scene::addScore);
             connect(enemy,&Enemy::enemyDie,this,&Scene::killingCount);
 
@@ -271,7 +273,7 @@ void Scene::generateLevel()
 
 
 
-    connect(enemy->getBullet(),&EnemyBullet::castleDie,this,&Scene::clearLevelOne);
+
     //connect(player1->getBullet(),&PlayerBullet::killOneEnemy,this,&Scene::killingCount);
 
     if(twoPlayer){
@@ -332,7 +334,7 @@ void Scene::clearLevelOne()
         Castle* castle = dynamic_cast<Castle*>(item);
         if (castle) {
             removeItem(castle);
-            delete castle;
+            //delete castle;
         }
     }
 
@@ -413,7 +415,7 @@ void Scene::killingCount()
     {
         if(GameOn==game1||GameOn==game2){
         killnum++;
-        qDebug()<<killnum;
+            qDebug()<<killnum;
         if(killnum==5&&GameOn==game1){
             GameOn = levelOneWin;
             updateGameState();
@@ -565,7 +567,8 @@ void Scene::map1()
         addItem(tree10);
         addItem(tree11);
 
-        Castle* castle = new Castle;
+
+        castle = new  Castle();
         castle->setPos(234,298);
         addItem(castle);
     }
@@ -618,9 +621,28 @@ void Scene::map2()
             water2->setPos(106+i*32,170);
             addItem(water2);
         }
+        for(int i= 0;i<5;i++){ //把堡壘的牆壁改厚一點 打五次才會消失
+            Brick* brick =new Brick;
+            brick->setPos(202,266);
+            addItem(brick);
+            Brick* brick3 =new Brick;
+            brick3->setPos(202,298);
+            addItem(brick3);
+            Brick* brick2 =new Brick;
+            brick2->setPos(234,266);
+            addItem(brick2);
+            Brick* brick4 =new Brick;
+            brick4->setPos(266,266);
+            addItem(brick4);
+            Brick* brick5 =new Brick;
+            brick5->setPos(266,298);
+            addItem(brick5);}
+        castle = new  Castle();
+        castle->setPos(234,298);
+        addItem(castle);
     }
 
-    void Scene::showFinalScore()
+void Scene::showFinalScore()
     {
         showFinal=1;
         if(highestScore <= score){
@@ -729,6 +751,18 @@ void Scene::updateGameState()
                 GameOn = end;
                 clearLevelOne();
                 showFinalScore();
+            }else if(castle->getHealth()<=0){
+                GameOn = end;
+                qDebug()<<"雙人輸了 主堡毀了";
+                if(player1){
+                    removeItem(player1);
+                }
+                if(player2){
+                    removeItem(player2);
+                }
+                showFinalScore();
+                clearLevelOne();
+
             }else if(GameOn == levelOneWin ||GameOn == levelTwoWin ){
                 if(player1){
                 removeItem(player1);
@@ -742,6 +776,15 @@ void Scene::updateGameState()
 
             }
         }else if(twoPlayer==0){
+            if(castle->getHealth()<=0){
+                GameOn = end;
+                qDebug()<<"單人輸了 主堡毀了";
+                removeItem(player1);
+                showFinalScore();
+                clearLevelOne();
+                return;
+
+            }
             if(player1->getHealth()==0){
                 player1Die=1;
                 GameOn = end;

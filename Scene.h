@@ -3,6 +3,7 @@
 
 #include "Bullet.h"
 #include "Player.h"
+#include "Castle.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
@@ -39,6 +40,7 @@ private:
     Player *player2;
    // Bullet *bullet1;
     gameOn GameOn;
+    Castle *castle;
 
     QGraphicsTextItem *healthText1;
     QGraphicsTextItem *healthText2;
