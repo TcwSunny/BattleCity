@@ -11,7 +11,7 @@ Enemy::Enemy()
 {
     QPixmap pixmap;
     enemyState = QRandomGenerator::global()->bounded(1, 5);
-    //enemyState =4;
+//    enemyState =4;
     timer = new QTimer(this);//跟著Bullet Delete掉
     connect(timer, &QTimer::timeout, this, &Enemy::move);//當發生time out時使用這個物件的move處理
     isMovementPaused = false;

@@ -101,6 +101,26 @@ void Scene::keyPressEvent(QKeyEvent *event){
                     });
 
 
+                }else if(powerUp->getPowerUpNumber()==4){
+                    QList<QGraphicsItem*> ItemList = items();
+                    foreach (QGraphicsItem *item, ItemList) {
+                        Enemy *enemy = dynamic_cast<Enemy*>(item);
+                        if(enemy){
+                            QTimer *Timer=new QTimer();
+                            Timer->start(3000);
+                            qDebug() << "計時開始";
+                            enemy->toggleMovementPause();
+                            enemyTimer->stop();
+                            connect(Timer, &QTimer::timeout, enemy, [=]() {
+                                qDebug() << "计时器超时，已经过了10秒";
+                                enemy->toggleMovementPause();
+                                enemyTimer->start();
+                                Timer->stop();
+                            });
+                        }
+
+                    }
+
                 }
                 removeItem(powerUp);
                 delete powerUp;
@@ -175,6 +195,24 @@ void Scene::keyPressEvent(QKeyEvent *event){
                         });
 
 
+                    }else if(powerUp->getPowerUpNumber()==4){
+                        QList<QGraphicsItem*> ItemList = items();
+                        foreach (QGraphicsItem *item, ItemList) {
+                            Enemy *enemy = dynamic_cast<Enemy*>(item);
+                            if(enemy){
+                                QTimer *Timer=new QTimer();
+                                Timer->start(3000);
+                                qDebug() << "計時開始";
+                                enemy->toggleMovementPause();
+                                enemyTimer->stop();
+                                connect(Timer, &QTimer::timeout, enemy, [=]() {
+                                    qDebug() << "计时器超时，已经过了10秒";
+                                    enemy->toggleMovementPause();
+                                    enemyTimer->start();
+                                    Timer->stop();
+                                });
+                            }
+                        }
                     }
                     removeItem(powerUp);
                    // delete powerUp;
@@ -237,7 +275,6 @@ void Scene::generateLevel()
     backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/backGround.jpg"));
     backGround->setZValue(-0.75);
     addItem(backGround);
-
 
     player1 = new Player(1);
     player1->setPos(10,298);
