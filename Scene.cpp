@@ -61,7 +61,7 @@ void Scene::keyPressEvent(QKeyEvent *event){
     }else if((GameOn == end ||GameOn==levelOneWin||GameOn==levelTwoWin) && (event->key() == Qt::Key_L)){
         loadGame();
     }
-    if((GameOn==levelOneWin) && (event->key() == Qt::Key_S)){
+    if((GameOn==levelOneWin || levelTwoWin) && (event->key() == Qt::Key_S)){
         saveGame();
         qDebug() << "GAME SAVE";
     }
@@ -922,7 +922,7 @@ void Scene::saveGame() {
         }else{
             out << "1" << "\n";
             out << twoPlayer << "\n";
-            out << "0" << "\n";
+            out << score << "\n";
         }
 
 
