@@ -51,6 +51,7 @@ private:
     QGraphicsTextItem *continueText;
     QGraphicsTextItem *scoreText;
     QGraphicsTextItem *finalText;
+    QGraphicsTextItem *saveText;
 
     QTimer *healthTimer;
     QTimer *enemyTimer;

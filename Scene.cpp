@@ -51,11 +51,17 @@ void Scene::keyPressEvent(QKeyEvent *event){
     if((GameOn == end ||GameOn==levelOneWin||GameOn==levelTwoWin) && (event->key() == Qt::Key_1)){
 
         twoPlayer = 0;
+        if(GameOn==levelOneWin||GameOn==levelTwoWin){
+            removeItem(saveText);
+        }
         generateLevel();
         qDebug() << "Start"<<twoPlayer;
     }else if((GameOn == end ||GameOn==levelOneWin||GameOn==levelTwoWin) && (event->key() == Qt::Key_2)){
 
         twoPlayer = 1;
+        if(GameOn==levelOneWin||GameOn==levelTwoWin){
+            removeItem(saveText);
+        }
         generateLevel();
         qDebug() << "Start"<<twoPlayer;
     }else if((GameOn == end ||GameOn==levelOneWin||GameOn==levelTwoWin) && (event->key() == Qt::Key_L)){
@@ -867,6 +873,19 @@ void Scene::updateGameState()
                 if(GameOn == levelOneWin){qDebug()<<"level one win";}
                 if(GameOn == levelTwoWin){qDebug()<<"level Two win";}
                 clearLevelOne();
+                saveText = new QGraphicsTextItem();
+                saveText->setPos(70,70);
+                saveText->setZValue(1.5);
+                QFont font;
+                font.setPointSize(30);  // Set the font size to 16
+                font.setBold(true);
+                saveText->setFont(font);
+                QColor textColor(Qt::white);
+                saveText->setDefaultTextColor(textColor);
+                QString SaveStr = QString("Press S to Save \nPress L to Load \nPress 2 to Continue");
+                saveText->setPlainText(SaveStr);
+                addItem(saveText);
+
 
             }
         }else if(twoPlayer==0){
@@ -892,6 +911,18 @@ void Scene::updateGameState()
                 if(GameOn == levelOneWin){qDebug()<<"level one win";}
                 if(GameOn == levelTwoWin){qDebug()<<"level Two win";}
                 clearLevelOne();
+                saveText = new QGraphicsTextItem();
+                saveText->setPos(70,70);
+                saveText->setZValue(1.5);
+                QFont font;
+                font.setPointSize(30);  // Set the font size to 16
+                font.setBold(true);
+                saveText->setFont(font);
+                QColor textColor(Qt::white);
+                saveText->setDefaultTextColor(textColor);
+                QString SaveStr = QString("Press S to Save \nPress L to Load \nPress 1 to Continue");
+                saveText->setPlainText(SaveStr);
+                addItem(saveText);
             }
         }
 
@@ -910,6 +941,11 @@ void Scene::writeHighestScore(int highestScore)
         file.close();
 }
 void Scene::loadGame() {
+
+        if(GameOn==levelOneWin||GameOn==levelTwoWin){
+            removeItem(saveText);
+        }
+
         QFile file("./Load.txt");
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             qDebug() << "Cannot open file for reading:" << file.errorString();
