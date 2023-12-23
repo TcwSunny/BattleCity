@@ -242,12 +242,16 @@ void Scene::generateLevel()
     player1 = new Player(1);
     player1->setPos(10,298);
     player1->setZValue(-0.5);
+    player1Die = 0;
+
     addItem(player1);
 
     if(twoPlayer){
         player2 = new Player(2);
         player2->setPos(300,298);
         player2->setZValue(-0.5);
+
+        player2Die = 0;
         addItem(player2);
     }
 
@@ -711,7 +715,7 @@ void Scene::showFinalScore()
         QColor textColor(Qt::white);
         finalText->setDefaultTextColor(textColor);
         addItem(finalText);
-        qDebug()<<score;
+        qDebug()<<"分數:"<<score;
     }
 
 
@@ -791,7 +795,8 @@ void Scene::updateGameState()
                 removeItem(player1);
                 player1Die = 1;
                 qDebug() << "Player 1 Die";
-            }else if(player2 && player2->getHealth()==0){
+            }
+            if(player2 && player2->getHealth()==0){
                 removeItem(player2);
                 player2Die =1;
                 qDebug()<<"player 2 die";
@@ -800,8 +805,9 @@ void Scene::updateGameState()
                 qDebug()<<player1Die<<" "<<player2Die<<" 雙人 輸了";
 
                 GameOn = end;
-                clearLevelOne();
                 showFinalScore();
+                clearLevelOne();
+
             }else if(castle->getHealth()<=0){
                 GameOn = end;
                 qDebug()<<"雙人輸了 主堡毀了";
