@@ -27,6 +27,9 @@ public:
 
 
 
+    void writeHighestScore(int highestScore);
+    void loadGame();
+    void saveGame();
 public slots:
     void updateGameState();
     void clearLevelOne();

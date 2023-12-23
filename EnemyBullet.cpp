@@ -10,6 +10,7 @@
 #include <QList>
 #include <QDebug>
 #include <QTimer>
+#include <QFile>
 
 
 EnemyBullet::EnemyBullet(Tank *tank,int speed):Bullet(tank)
@@ -21,6 +22,7 @@ EnemyBullet::EnemyBullet(Tank *tank,int speed):Bullet(tank)
     timer->start(speed); // 移動速度
     Parent = tank;
     isMovementPaused = false;
+
 }
 void EnemyBullet::move() {
     if (isMovementPaused) {

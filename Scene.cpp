@@ -12,6 +12,7 @@
 #include <QTimer>
 #include <QFont>
 #include <QCoreApplication>
+#include <QFile>
 
 Scene::Scene(QObject *parent)
     :QGraphicsScene{parent}
@@ -25,10 +26,22 @@ Scene::Scene(QObject *parent)
     score = 0;
     killnum = 0;
     isGamePaused = false;
-    highestScore =0;
+
     showFinal=0;//bool
     //generateLevelTwo();
 
+    QFile file("./Score.txt");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "Cannot open file for reading:" << file.errorString();
+        return;
+    }
+
+    QTextStream in(&file);
+    QString firstLine = in.readLine();
+    highestScore =firstLine.toInt();
+    qDebug() << "Highest score:" << highestScore;
+
+    file.close();
 }
 
 void Scene::keyPressEvent(QKeyEvent *event){
@@ -45,6 +58,12 @@ void Scene::keyPressEvent(QKeyEvent *event){
         twoPlayer = 1;
         generateLevel();
         qDebug() << "Start"<<twoPlayer;
+    }else if((GameOn == end ||GameOn==levelOneWin||GameOn==levelTwoWin) && (event->key() == Qt::Key_L)){
+        loadGame();
+    }
+    if((GameOn==levelOneWin) && (event->key() == Qt::Key_S)){
+        saveGame();
+        qDebug() << "GAME SAVE";
     }
 
     if(GameOn == game1||GameOn==game2){
@@ -678,6 +697,7 @@ void Scene::showFinalScore()
         showFinal=1;
         if(highestScore <= score){
             highestScore = score;
+            writeHighestScore(highestScore);
         }
         finalText = new QGraphicsTextItem();
         QString scoreStr2 = QString("       Score : %1\nHighest Score: %2").arg(score).arg(highestScore);
@@ -833,4 +853,73 @@ void Scene::updateGameState()
         }
 
         }
+void Scene::writeHighestScore(int highestScore)
+{
+        QFile file("./Score.txt");
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            qDebug() << "Cannot open file for writing:" << file.errorString();
+            return;
+        }
 
+        QTextStream out(&file);
+        out << QString::number(highestScore) << "\n"; // 將最高分寫入第一行
+
+        file.close();
+}
+void Scene::loadGame() {
+        QFile file("./Load.txt");
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            qDebug() << "Cannot open file for reading:" << file.errorString();
+            return;
+        }
+
+        QTextStream in(&file);
+
+        int level=1;
+        if (!in.atEnd()) {
+            QString levelStr = in.readLine();
+            level = levelStr.toInt();
+        }
+
+        if (!in.atEnd()) {
+            QString playerStr = in.readLine();
+            twoPlayer = playerStr.toInt();
+        }
+
+        if (!in.atEnd()) {
+            QString scoreStr = in.readLine();
+            score = scoreStr.toInt();
+        }
+        if(level==1){
+            GameOn = end;
+            generateLevel();
+        }
+        if(level==2){
+            GameOn = levelOneWin;
+            generateLevel();
+        }
+
+        file.close();
+}
+void Scene::saveGame() {
+        QFile file("./Load.txt");
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            qDebug() << "Cannot open file for writing:" << file.errorString();
+            return;
+        }
+
+        QTextStream out(&file);
+        if(GameOn==levelOneWin){
+            out << "2" << "\n";
+            out << twoPlayer << "\n";
+            out << score << "\n";
+        }else{
+            out << "1" << "\n";
+            out << twoPlayer << "\n";
+            out << "0" << "\n";
+        }
+
+
+        file.close();
+        qDebug() << "Game saved to Load.txt";
+}
