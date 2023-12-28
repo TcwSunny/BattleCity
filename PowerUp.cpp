@@ -7,7 +7,6 @@ PowerUp::PowerUp()
 {
     QPixmap pixmap;
     powerUpNumber  = QRandomGenerator::global()->bounded(1,5);
-//    powerUpNumber = 4;
 
     switch (powerUpNumber) {
     case 1:
@@ -30,7 +29,6 @@ PowerUp::PowerUp()
 
 PowerUp::~PowerUp()
 {
-    //目前用不到
     switch(powerUpNumber){
     case 1:
         qDebug()<<"gernade";

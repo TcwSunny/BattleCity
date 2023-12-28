@@ -26,10 +26,9 @@ Scene::Scene(QObject *parent)
     score = 0;
     killnum = 0;
     isGamePaused = false;
+    showFinal=0;
 
-    showFinal=0;//bool
-    //generateLevelTwo();
-
+    //Highest Score讀取
     QFile file("./Score.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "Cannot open file for reading:" << file.errorString();
@@ -48,30 +47,32 @@ void Scene::keyPressEvent(QKeyEvent *event){
     if (event->key() == Qt::Key_P) {
         togglePause();
     }
+    //單人模式
     if((GameOn == end ||GameOn==levelOneWin||GameOn==levelTwoWin) && (event->key() == Qt::Key_1)){
-
         twoPlayer = 0;
         if(GameOn==levelOneWin||GameOn==levelTwoWin){
             removeItem(saveText);
         }
         generateLevel();
         qDebug() << "Start"<<twoPlayer;
+    //雙人模式
     }else if((GameOn == end ||GameOn==levelOneWin||GameOn==levelTwoWin) && (event->key() == Qt::Key_2)){
-
         twoPlayer = 1;
         if(GameOn==levelOneWin||GameOn==levelTwoWin){
             removeItem(saveText);
         }
         generateLevel();
         qDebug() << "Start"<<twoPlayer;
+    //讀取檔案
     }else if((GameOn == end ||GameOn==levelOneWin||GameOn==levelTwoWin) && (event->key() == Qt::Key_L)){
         loadGame();
     }
+    //儲存檔案
     if((GameOn==levelOneWin || levelTwoWin) && (event->key() == Qt::Key_S)){
         saveGame();
         qDebug() << "GAME SAVE";
     }
-
+    //遊戲進行時偵測撞到的物品
     if(GameOn == game1||GameOn==game2){
         bool IsBrick = false;
         bool IsWater = false;
@@ -95,15 +96,13 @@ void Scene::keyPressEvent(QKeyEvent *event){
                 }else if(powerUp->getPowerUpNumber()==3){
 
                     helmetTimer=new QTimer();
-                    // 设置计时器的超时时间为10秒
                     helmetTimer->start(10000);
-                    // 连接计时器的timeout信号到槽函数
                      qDebug() << "計時開始";
                     player1->setHelmetOn(1);
                     connect(helmetTimer, &QTimer::timeout, this, [=]() {
                         qDebug() << "计时器超时，已经过了10秒";
                         player1->setHelmetOn(0);
-                        helmetTimer->stop();// 在超时时退出应用程序
+                        helmetTimer->stop();
                     });
 
 
@@ -133,8 +132,9 @@ void Scene::keyPressEvent(QKeyEvent *event){
             }
         }
         if(isGamePaused){
-            return; //如果game paused,不能動
+            return;
         }
+        //控制上下左右
         if(IsBrick==0 && IsWater==0){
             if (event->key() == Qt::Key_Left && player1->x()>10) {
                 player1->setPos(player1->x()-4,player1->y());
@@ -149,7 +149,7 @@ void Scene::keyPressEvent(QKeyEvent *event){
                 player1->setPos(player1->x(),player1->y()+4);
                 player1->Rotate(180);
             }
-        }else{
+        }else{//若碰到牆壁則返回上一步
             if (player1->getRotation() == 0){
                 player1->setPos(player1->x(),player1->y()+4);
             }else if (player1->getRotation() == 90){
@@ -189,15 +189,13 @@ void Scene::keyPressEvent(QKeyEvent *event){
                     }else if(powerUp->getPowerUpNumber()==3){
 
                         helmetTimer=new QTimer();
-                        // 设置计时器的超时时间为10秒
                         helmetTimer->start(10000);
-                        // 连接计时器的timeout信号到槽函数
                         qDebug() << "計時開始";
                         player1->setHelmetOn(1);
                         connect(helmetTimer, &QTimer::timeout, this, [=]() {
                             qDebug() << "10秒結束";
                             player1->setHelmetOn(0);
-                            helmetTimer->stop();// 在超时时退出应用程序
+                            helmetTimer->stop();
                         });
 
 
@@ -221,7 +219,6 @@ void Scene::keyPressEvent(QKeyEvent *event){
                         }
                     }
                     removeItem(powerUp);
-                   // delete powerUp;
                 }
             }
             if(IsBrick2==0 && IsWater2==0){
@@ -258,18 +255,8 @@ void Scene::keyPressEvent(QKeyEvent *event){
         }
     }
 
-    if (event->key() == Qt::Key_O) {
-        qDebug()<<GameOn;
-    }
-    if (event->key() == Qt::Key_I) {
-        qDebug()<<player1->getHelmetOn();
-    }
-    if (event->key() == Qt::Key_U) {
-        useGrenade();
-    }
-
 }
-void Scene::generateLevel()
+void Scene::generateLevel()//生成第一關
 {
     if(GameOn==levelOneWin){
         map2();
@@ -282,6 +269,7 @@ void Scene::generateLevel()
     backGround->setZValue(-0.75);
     addItem(backGround);
 
+    //生成player
     player1 = new Player(1);
     player1->setPos(10,298);
     player1->setZValue(-0.5);
@@ -299,7 +287,7 @@ void Scene::generateLevel()
     }
 
 
-
+    //生成enemy
     Enemy* enemy = new Enemy;
     enemy->setPos(10,10);
     enemy->setZValue(-0.5);
@@ -307,8 +295,6 @@ void Scene::generateLevel()
     connect(enemy->getBullet(),&EnemyBullet::castleDie,this,&Scene::updateGameState);
     connect(enemy,&Enemy::enemyDie,this,&Scene::addScore);
     connect(enemy,&Enemy::enemyDie,this,&Scene::killingCount);
-
-    //connect(enemy,&Enemy::armorTankDie,this,&Scene::generatePowerUp);
     addItem(enemy);
 
     enemyTimer = new QTimer();
@@ -323,27 +309,26 @@ void Scene::generateLevel()
             connect(enemy,&Enemy::enemyDie,this,&Scene::addScore);
             connect(enemy,&Enemy::enemyDie,this,&Scene::killingCount);
 
-            //connect(enemy,&Enemy::armorTankDie,this,&Scene::generatePowerUp);
             enemy->setPos(enemyGenetate * 200, 10);
             enemy->setZValue(-0.5);
             addItem(enemy);
             generatedEnemyCount++;
         } else {
-            enemyTimer->stop();  // 生成 20 台敵人坦克後停止計時器
+            enemyTimer->stop();
         }
     });
     enemyTimer->start(4000);
 
 
-
+    //生成文字
     healthText1 = new QGraphicsTextItem();
-    healthText1->setPos(510,288); // Adjust the position as needed
-    QColor textColor(Qt::white); // Example: White text color
+    healthText1->setPos(510,288);
+    QColor textColor(Qt::white);
     healthText1->setDefaultTextColor(textColor);
     addItem(healthText1);
     healthText2 = new QGraphicsTextItem();
-    healthText2->setPos(510,300); // Adjust the position as needed
-    QColor textColor2(Qt::white); // Example: White text color
+    healthText2->setPos(510,300);
+    QColor textColor2(Qt::white);
     healthText2->setDefaultTextColor(textColor2);
     addItem(healthText2);
     updateHealthText();
@@ -356,7 +341,7 @@ void Scene::generateLevel()
     addItem(pauseText);
 
     scoreText = new QGraphicsTextItem();
-    scoreText->setPos(505,150); // Adjust the position as needed
+    scoreText->setPos(505,150);
     scoreText->setDefaultTextColor(textColor);
     QString scoreStr = QString("Score :  %1").arg(score);;
     scoreText->setPlainText(scoreStr);
@@ -366,28 +351,15 @@ void Scene::generateLevel()
     connect(healthTimer, &QTimer::timeout, this, &Scene::updateHealthText);
     healthTimer->start(500);
 
-
-
-
-
-
-    //connect(player1->getBullet(),&PlayerBullet::killOneEnemy,this,&Scene::killingCount);
-
-    if(twoPlayer){
-    //connect(player2->getBullet(),&PlayerBullet::killOneEnemy,this,&Scene::killingCount);
-    }
-    //QTimer::singleShot(5000, this, &Scene::clearLevelOne);
     if(showFinal==1){
         removeItem(finalText);
         showFinal =0;
-
     }
-
 }
 
 
 
-void Scene::clearLevelOne()
+void Scene::clearLevelOne()//清除畫面
 {
 
     qDebug() << "清除畫面";
@@ -395,7 +367,6 @@ void Scene::clearLevelOne()
     delete enemyTimer;
 
 
-    // Remove and delete bricks
     QList<QGraphicsItem*> brickItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
     for (QGraphicsItem* item : brickItems) {
         Brick* brick = dynamic_cast<Brick*>(item);
@@ -405,7 +376,6 @@ void Scene::clearLevelOne()
         }
     }
 
-    // Remove and delete water
     QList<QGraphicsItem*> waterItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
     for (QGraphicsItem* item : waterItems) {
         Water* water = dynamic_cast<Water*>(item);
@@ -415,7 +385,6 @@ void Scene::clearLevelOne()
         }
     }
 
-    // Remove and delete trees
     QList<QGraphicsItem*> treeItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
     for (QGraphicsItem* item : treeItems) {
         Trees* tree = dynamic_cast<Trees*>(item);
@@ -425,17 +394,14 @@ void Scene::clearLevelOne()
         }
     }
 
-    // Remove and delete castle
     QList<QGraphicsItem*> castleItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
     for (QGraphicsItem* item : castleItems) {
         Castle* castle = dynamic_cast<Castle*>(item);
         if (castle) {
             removeItem(castle);
-            //delete castle;
         }
     }
 
-    // Remove and delete tanks
     if(GameOn==end){
     QList<QGraphicsItem*> tankItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
     for (QGraphicsItem* item : tankItems) {
@@ -447,7 +413,6 @@ void Scene::clearLevelOne()
         }
     }}
 
-    // Remove and delete bullets
     QList<QGraphicsItem*> bulletItems = items(QRectF(0, 0, width(), height()), Qt::IntersectsItemBoundingRect);
     for (QGraphicsItem* item : bulletItems) {
         Bullet* bullet = dynamic_cast<Bullet*>(item);
@@ -462,7 +427,6 @@ void Scene::clearLevelOne()
         PowerUp* powerUp = dynamic_cast<PowerUp*>(item);
         if (powerUp) {
             removeItem(powerUp);
-            //delete powerUp;
         }
     }
 
@@ -482,9 +446,6 @@ void Scene::clearLevelOne()
     removeItem(scoreText);
     addScore(0);
     delete scoreText;
-    //backGround = new QGraphicsPixmapItem(QPixmap(":/images/Images/End1Player.jpg"));
-    //backGround->setZValue(-0.75);
-   //addItem(backGround);
 
 }
 
@@ -549,7 +510,7 @@ void Scene::useGrenade()
 
 void Scene::map1()
     {
-        for(int i= 0;i<5;i++){ //把堡壘的牆壁改厚一點 打五次才會消失
+        for(int i= 0;i<5;i++){
             Brick* brick =new Brick;
             brick->setPos(202,266);
             addItem(brick);
@@ -718,7 +679,7 @@ void Scene::map2()
             water2->setPos(106+i*32,170);
             addItem(water2);
         }
-        for(int i= 0;i<5;i++){ //把堡壘的牆壁改厚一點 打五次才會消失
+        for(int i= 0;i<5;i++){
             Brick* brick =new Brick;
             brick->setPos(202,266);
             addItem(brick);
@@ -752,7 +713,7 @@ void Scene::showFinalScore()
         finalText->setPos(50,80);
         finalText->setZValue(1.5);
         QFont font;
-        font.setPointSize(30);  // Set the font size to 16
+        font.setPointSize(30);
         font.setBold(true);
         finalText->setFont(font);
         QColor textColor(Qt::white);
@@ -786,21 +747,17 @@ void Scene::togglePause()
             continueText->setPos(70,70);
             continueText->setZValue(1.5);
             QFont font;
-            font.setPointSize(60);  // Set the font size to 16
+            font.setPointSize(60);
             font.setBold(true);
             continueText->setFont(font);
             QColor textColor(Qt::white);
             continueText->setDefaultTextColor(textColor);
             addItem(continueText);
 
-            // Pause game logic (stop timers, freeze movements, etc.)
-            // For example:
             enemyTimer->stop();
             healthTimer->stop();
 
         } else {
-            // Resume game logic (start timers, allow movements, etc.)
-            // For example:
             enemyTimer->start();
             healthTimer->start();
             removeItem(continueText);
@@ -877,7 +834,7 @@ void Scene::updateGameState()
                 saveText->setPos(70,70);
                 saveText->setZValue(1.5);
                 QFont font;
-                font.setPointSize(30);  // Set the font size to 16
+                font.setPointSize(30);
                 font.setBold(true);
                 saveText->setFont(font);
                 QColor textColor(Qt::white);
@@ -936,7 +893,7 @@ void Scene::writeHighestScore(int highestScore)
         }
 
         QTextStream out(&file);
-        out << QString::number(highestScore) << "\n"; // 將最高分寫入第一行
+        out << QString::number(highestScore) << "\n";
 
         file.close();
 }

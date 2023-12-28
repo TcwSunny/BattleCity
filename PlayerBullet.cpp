@@ -26,51 +26,38 @@ void PlayerBullet::toggleMovementPause()
 }
 void PlayerBullet::move() {
     if (isMovementPaused) {
-        return;  // Do nothing if movement is paused
+        return;
     }
-
+    //當bullet撞到brick時，刪除brick及bullet
     QList<QGraphicsItem *> colliding_items = collidingItems();
     foreach (QGraphicsItem *item, colliding_items) {
         Brick * brick = dynamic_cast<Brick*>(item);
         if (brick) {
-
-            // Remove from the scene first
             scene()->removeItem(brick);
             scene()->removeItem(this);
-            // Delete from the memory
             delete brick;
             Parent->setIsBulletInScene(false);
-            return; // important
+            return;
         }
     }
 
     if(x()>15 && x()<475 && y()>15 && y()<315){
-
-        // Check for collisions with bricks
+        //當bullet撞到player及castle
         QList<QGraphicsItem*> colliding_items = collidingItems();
-
         foreach (QGraphicsItem *item, colliding_items) {
-            if (dynamic_cast<Brick*>(item)) {
-                // Collided with a brick, remove both the bullet and the brick
-                scene()->removeItem(this);
-                Parent->setIsBulletInScene(0);
-
-            }
             if (dynamic_cast<Enemy*>(item)) {
-                // Collided with a brick, remove both the bullet and the brick
                 Enemy *enemy = dynamic_cast<Enemy*>(item);
                 scene()->removeItem(this);
                 Parent->setIsBulletInScene(0);
                 enemy->decreaseHealth();
                 if(enemy->getHealth()==0){
-                    //emit killOneEnemy();
                     delete enemy;
                 }
 
             }
             break;
         }
-
+        //移動
         if(Rotation == 0){
             setPos(x(), y()-8);
         }else if(Rotation == 90){

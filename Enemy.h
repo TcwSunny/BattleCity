@@ -15,10 +15,8 @@ public:
     EnemyBullet *getBullet() const;
     void setBullet(EnemyBullet *newBullet);
     void enemyShootBullet();
-
     int getHealth() const;
     void decreaseHealth();
-
     void toggleMovementPause();
 
 public slots:

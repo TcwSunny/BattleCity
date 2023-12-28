@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QGraphicsPixmapItem>
 
-// 前置宣告
 class Tank;
 
 class Bullet : public QObject, public QGraphicsPixmapItem

@@ -8,14 +8,13 @@ class EnemyBullet :public Bullet
     Q_OBJECT
 public:
     EnemyBullet(Tank *tank, int speed);
-
     void move();
-void toggleMovementPause();
-
+    void toggleMovementPause();
 
 signals:
     void playerDie();
     void castleDie();
+
 private:
     bool isMovementPaused;
 };

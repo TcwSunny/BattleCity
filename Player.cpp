@@ -14,7 +14,7 @@ Player::Player(int num):Health(2),helmetOn(0)
         setPixmap(pixmap);
     }
 
-
+    setRotation(0);
     bullet = new PlayerBullet(this);
 }
 

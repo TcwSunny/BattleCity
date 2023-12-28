@@ -11,8 +11,10 @@ public:
     PowerUp();
     ~PowerUp();
     int getPowerUpNumber();
+
 signals:
     void activatePowerUp(int);
+
 private:
     int powerUpNumber;
 };
